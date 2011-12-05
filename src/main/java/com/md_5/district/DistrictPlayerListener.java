@@ -34,7 +34,7 @@ public class DistrictPlayerListener extends PlayerListener {
         if (currentRegionSet != null) {
             for (Region r : currentRegionSet) {
                 if (eventPlayer.hasPermission("district.wand") && eventPlayer.getItemInHand().getTypeId() == Config.wand) {
-                    regions += r.getName() + ", ";
+                    regions += r.getName() + " (" + r.getOwner() + "), ";
                 }
                 if (!r.canUse(eventPlayer)) {
                     r.sendDeny(eventPlayer);

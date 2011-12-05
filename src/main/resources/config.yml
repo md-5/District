@@ -5,7 +5,7 @@ medium: 11
 large: 15
 xlarge: 21
 
-# The selection tool - ignore this
+# The prospecting tool
 wand: 286
 
 # Outline block
