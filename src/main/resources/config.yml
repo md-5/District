@@ -1,0 +1,12 @@
+# Region sizes
+xsmall: 5
+small: 7
+medium: 11
+large: 15
+xlarge: 21
+
+# The selection tool - ignore this
+wand: 286
+
+# Outline block
+outline: 20

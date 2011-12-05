@@ -1,0 +1,42 @@
+name: District
+version: 1.0
+description: Simple self-managed land claiming plugin for Shadowraze
+author: md_5
+website: https://github.com/md-5/District
+
+main: com.md_5.district.District
+
+commands:
+  district:
+    description: Access to the main District command
+    aliases: ds
+    permission: district.command
+    
+permissions:
+    district.command:
+        description: The ability to interact with District
+        default: true
+    district.ignore:
+        description: The ability to override District protections
+        default: op
+    district.wand:
+        description: The ability to check applicable regions
+        default: op
+    district.xsmall:
+        description: Size of regions the player can claim
+        default: false
+    district.small:
+        description: Size of regions the player can claim
+        default: false
+    district.medium:
+        description: Size of regions the player can claim
+        default: false
+    district.large:
+        description: Size of regions the player can claim
+        default: false
+    district.xlarge:
+        description: Size of regions the player can claim
+        default: false
+    district.infinite:
+        description: Size of regions the player can claim
+        default: false
