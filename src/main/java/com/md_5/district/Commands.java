@@ -30,7 +30,7 @@ public class Commands {
         point1.add(size, size, size);
         point2.add(-size, -size, -size);
 
-        if ((Util.getTotalSize(player.getName()) + Util.getSize(point1, point2)) > Util.getMaxSize(player)) {
+        if (((Util.getTotalSize(player.getName()) + Util.getSize(point1, point2)) > Util.getMaxSize(player)) && Util.getMaxSize(player) != -1) {
             player.sendMessage(ChatColor.RED + "District: You cannot claim a region that big!");
             return;
         }

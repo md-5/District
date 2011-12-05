@@ -3,8 +3,6 @@ package com.md_5.district;
 import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -43,8 +41,10 @@ public class District extends JavaPlugin {
             player.sendMessage(ChatColor.GOLD + "/district claim [size] [region]");
             player.sendMessage(ChatColor.GOLD + "/district show [region]");
             player.sendMessage(ChatColor.GOLD + "/district remove [region]");
+            player.sendMessage(ChatColor.GOLD + "/district list");
             player.sendMessage(ChatColor.GOLD + "/district addmember [region] [player]");
             player.sendMessage(ChatColor.GOLD + "/district delmember [region] [player]");
+            player.sendMessage(ChatColor.GOLD + "/district listmembers [region]");
             return true;
         }
         if (args[0].equalsIgnoreCase("claim")) {
