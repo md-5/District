@@ -1,13 +1,10 @@
 package com.md_5.district;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
 
 public class Util {
 

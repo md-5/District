@@ -161,7 +161,7 @@ public class Commands {
             for (String member : r.getMembers()) {
                 peeps += member + ", ";
             }
-            if (peeps != null) {
+            if (peeps != "") {
                 player.sendMessage(ChatColor.GREEN + "District: " + args[1] + " has these members: " + peeps);
             } else {
                 player.sendMessage(ChatColor.GREEN + "District: " + args[1] + " has no members");

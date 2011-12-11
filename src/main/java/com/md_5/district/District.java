@@ -11,7 +11,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class District extends JavaPlugin {
 
     public static final Logger logger = Bukkit.getServer().getLogger();
+    @SuppressWarnings("unused")
     private DistrictBlockListener blockListener;
+    @SuppressWarnings("unused")
     private DistrictPlayerListener playerListener;
 
     public void onEnable() {

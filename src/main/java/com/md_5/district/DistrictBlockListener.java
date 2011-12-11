@@ -12,6 +12,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 
 public class DistrictBlockListener extends BlockListener {
 
+    @SuppressWarnings("unused")
     private final District plugin;
 
     public DistrictBlockListener(final District plugin) {

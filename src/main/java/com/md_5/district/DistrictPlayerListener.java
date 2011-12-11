@@ -12,6 +12,7 @@ import org.bukkit.event.player.PlayerListener;
 
 public class DistrictPlayerListener extends PlayerListener {
 
+    @SuppressWarnings("unused")
     private final District plugin;
 
     public DistrictPlayerListener(final District plugin) {
