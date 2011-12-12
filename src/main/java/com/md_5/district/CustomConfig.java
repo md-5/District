@@ -7,6 +7,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 public class CustomConfig {
 
+    @SuppressWarnings("unused")
     private final District plugin;
     private FileConfiguration customConfig = null;
     private File customConfigurationFile = null;

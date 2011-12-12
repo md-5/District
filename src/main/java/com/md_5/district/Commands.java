@@ -3,6 +3,8 @@ package com.md_5.district;
 import java.util.ArrayList;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.command.CommandException;
 import org.bukkit.entity.Player;
 
 public class Commands {
@@ -12,22 +14,30 @@ public class Commands {
             invalidArgs(player);
             return;
         }
-        int size;
+        int size, height;
         try {
             size = Integer.parseInt(args[1]);
         } catch (NumberFormatException ex) {
-            player.sendMessage(ChatColor.RED + "District: " + args[1] + " is not a valid number");
-            return;
+            throw new CommandException(args[1] + " is not a valid number");
         }
         if (size % 2 == 0) {
-            player.sendMessage(ChatColor.RED + "District: Size must be odd");
-            return;
+            throw new CommandException("Size must be odd");
         }
+        
+        World world = player.getWorld();
+        
+        // Limit height to world height
+        height = Math.min(size, world.getMaxHeight());
+        
         size /= 2;
+        height /= 2;
+        
         size = (int) Math.floor(size);
+        height = (int) Math.floor(size);
+        
         Location point1 = player.getLocation();
         Location point2 = player.getLocation();
-        point1.add(size, size, size);
+        point1.add(size, height, size);
         point2.add(-size, -size, -size);
 
         if (((Util.getTotalSize(player.getName()) + Util.getSize(point1, point2)) > Util.getMaxSize(player)) && Util.getMaxSize(player) != -1) {
@@ -47,18 +57,13 @@ public class Commands {
         Regions.addRegion(creation);
         Loader.save(district, creation);
         player.sendMessage(ChatColor.GREEN + "District: A " + args[1] + "x" + args[1] + "x"
-                + args[1] + " region named " + args[2] + " has been claimed for you!");
+                + args[1] + " region named " + creation.getName() + " has been claimed for you!");
         return;
     }
 
-    public static void show(Player player, String[] args, int count) {
-        if (args.length != count) {
+    public static void show(Player player, String[] args, Region r) {
+        if (args.length != 2) {
             invalidArgs(player);
-            return;
-        }
-        Region r = Regions.getRegion(args[1]);
-        if (r == null) {
-            player.sendMessage(ChatColor.RED + "District: Error that region does not exist");
             return;
         }
         if (r.canUse(player)) {
@@ -70,14 +75,9 @@ public class Commands {
         }
     }
 
-    public static void remove(Player player, String[] args, final District district, int count) {
-        if (args.length != count) {
+    public static void remove(Player player, String[] args, final District district, Region r) {
+        if (args.length != 2) {
             invalidArgs(player);
-            return;
-        }
-        Region r = Regions.getRegion(args[1]);
-        if (r == null) {
-            player.sendMessage(ChatColor.RED + "District: Error that region does not exist");
             return;
         }
         if (r.isOwner(player)) {
@@ -89,14 +89,9 @@ public class Commands {
         }
     }
 
-    public static void addMember(Player player, String[] args, final District district, int count) {
-        if (args.length != count) {
+    public static void addMember(Player player, String[] args, final District district, Region r) {
+        if (args.length != 3) {
             invalidArgs(player);
-            return;
-        }
-        Region r = Regions.getRegion(args[1]);
-        if (r == null) {
-            player.sendMessage(ChatColor.RED + "District: Error that region does not exist");
             return;
         }
         if (r.isOwner(player)) {
@@ -113,14 +108,9 @@ public class Commands {
         return;
     }
 
-    public static void delMember(Player player, String[] args, final District district, int count) {
-        if (args.length != count) {
+    public static void delMember(Player player, String[] args, final District district, Region r) {
+        if (args.length != 3) {
             invalidArgs(player);
-            return;
-        }
-        Region r = Regions.getRegion(args[1]);
-        if (r == null) {
-            player.sendMessage(ChatColor.RED + "District: Error that region does not exist");
             return;
         }
         if (r.isOwner(player)) {
@@ -151,14 +141,9 @@ public class Commands {
         }
     }
 
-    public static void listMembers(Player player, String[] args, int count) {
-        if (args.length != count) {
+    public static void listMembers(Player player, String[] args, Region r) {
+        if (args.length != 2) {
             invalidArgs(player);
-            return;
-        }
-        Region r = Regions.getRegion(args[1]);
-        if (r == null) {
-            player.sendMessage(ChatColor.RED + "District: Error that region does not exist");
             return;
         }
         String peeps = "";
@@ -166,10 +151,10 @@ public class Commands {
             for (String member : r.getMembers()) {
                 peeps += member + ", ";
             }
-            if (peeps != null) {
-                player.sendMessage(ChatColor.GREEN + "District: " + args[1] + " has these members: " + peeps);
+            if (peeps != "") {
+                player.sendMessage(ChatColor.GREEN + "District: " + r.getName() + " has these members: " + peeps);
             } else {
-                player.sendMessage(ChatColor.GREEN + "District: " + args[1] + " has no members");
+                player.sendMessage(ChatColor.GREEN + "District: " + r.getName() + " has no members");
             }
         } else {
             r.sendDeny(player);
@@ -178,6 +163,6 @@ public class Commands {
     }
 
     public static void invalidArgs(Player p) {
-        p.sendMessage(ChatColor.RED + "District: Invalid number of arguments for that command");
+        throw new CommandException("Invalid number of arguments for that command");   
     }
 }
