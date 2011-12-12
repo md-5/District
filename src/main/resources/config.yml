@@ -1,9 +1,18 @@
 # Region sizes
-xsmall: 5
-small: 7
-medium: 11
-large: 15
-xlarge: 21
+sizes:
+    xsmall: 5
+    small: 7
+    medium: 11
+    large: 15
+    xlarge: 21
+    
+# Maximum volume a player can claim
+volumes: 
+    xsmall: 125
+    small: 343
+    medium: 1331
+    large: 11390625
+    xlarge: 85766121
 
 # The prospecting tool
 wand: 286
