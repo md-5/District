@@ -5,6 +5,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandException;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class Commands {
@@ -127,7 +128,7 @@ public class Commands {
         return;
     }
 
-    public static void list(Player player) {
+    public static void list(String player, CommandSender sender) {
         String owns = "";
         String isMemberOf = "";
         for (Region r : Regions.getRegions()) {
@@ -138,20 +139,48 @@ public class Commands {
                 isMemberOf += r.getName() + ", ";
             }
         }
+        
+        Boolean isSender = player == sender.getName();
         if(!isMemberOf.equals("")) {
-            player.sendMessage(ChatColor.GREEN + "District: You are a member of these regions: " + isMemberOf);
+            sender.sendMessage(ChatColor.GREEN + "District: " + (isSender?"You are":(player + " is")) +
+            		" a member of these regions: " + isMemberOf);
         }
         else {
-            player.sendMessage(ChatColor.GREEN + "District: You are not a member of any regions");
+            sender.sendMessage(ChatColor.GREEN + "District: " + (isSender?"You are":(player + " is")) +
+                    " not a member of any regions");
         }
         
         if (!owns.equals("")) {
-            player.sendMessage(ChatColor.GREEN + "District: You own these regions: " + owns);
+            sender.sendMessage(ChatColor.GREEN + "District: " + (isSender?"You own":(player + " owns")) + 
+                    " these regions: " + owns);
         } else {
-            player.sendMessage(ChatColor.GREEN + "District: You own no regions");
+            sender.sendMessage(ChatColor.GREEN + "District: " + (isSender?"You own":(player + " owns")) +
+                    " no regions");
         }
     }
 
+    public static void listAll(Player sender, String[] args) {
+        if(!sender.hasPermission("district.listall")) {
+            throw new CommandException("You don't have permission to access that command!");
+        }
+        
+        if(args.length == 2) {
+            String player = args[1];
+            
+            list(player, sender);
+        }
+        else if(args.length == 1) {
+            String result = "";
+            for (Region r : Regions.getRegions()) {
+                result += r.getName() + ", ";
+            }
+            sender.sendMessage(ChatColor.GREEN + "District: The following regions exist: " + result);
+        }
+        else {
+            invalidArgs(sender);
+        }
+    }
+    
     public static void listMembers(Player player, String[] args, Region r) {
         if (args.length != 2) {
             invalidArgs(player);

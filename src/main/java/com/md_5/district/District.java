@@ -86,7 +86,11 @@ public class District extends JavaPlugin {
                 return true;
             }
             if (args[0].equalsIgnoreCase("list")) {
-                Commands.list(player);
+                Commands.list(player.getName(), player);
+                return true;
+            }
+            if (args[0].equalsIgnoreCase("listall")) {
+                Commands.listAll(player, args);
                 return true;
             }
             if (args[0].equalsIgnoreCase("listmembers")) {
