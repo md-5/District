@@ -3,6 +3,7 @@ package com.md_5.district;
 import java.util.ArrayList;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.command.CommandException;
 import org.bukkit.entity.Player;
 
 public class Commands {
@@ -42,18 +43,13 @@ public class Commands {
         Regions.addRegion(creation);
         Loader.save(district, creation);
         player.sendMessage(ChatColor.GREEN + "District: A " + args[1] + "x" + args[1] + "x"
-                + args[1] + " region named " + args[2] + " has been claimed for you!");
+                + args[1] + " region named " + creation.getName() + " has been claimed for you!");
         return;
     }
 
-    public static void show(Player player, String[] args, int count) {
-        if (args.length != count) {
+    public static void show(Player player, String[] args, Region r) {
+        if (args.length != 2) {
             invalidArgs(player);
-            return;
-        }
-        Region r = Regions.getRegion(args[1]);
-        if (r == null) {
-            player.sendMessage(ChatColor.RED + "District: Error that region does not exist");
             return;
         }
         if (r.canUse(player)) {
@@ -65,14 +61,9 @@ public class Commands {
         }
     }
 
-    public static void remove(Player player, String[] args, final District district, int count) {
-        if (args.length != count) {
+    public static void remove(Player player, String[] args, final District district, Region r) {
+        if (args.length != 2) {
             invalidArgs(player);
-            return;
-        }
-        Region r = Regions.getRegion(args[1]);
-        if (r == null) {
-            player.sendMessage(ChatColor.RED + "District: Error that region does not exist");
             return;
         }
         if (r.isOwner(player)) {
@@ -84,14 +75,9 @@ public class Commands {
         }
     }
 
-    public static void addMember(Player player, String[] args, final District district, int count) {
-        if (args.length != count) {
+    public static void addMember(Player player, String[] args, final District district, Region r) {
+        if (args.length != 3) {
             invalidArgs(player);
-            return;
-        }
-        Region r = Regions.getRegion(args[1]);
-        if (r == null) {
-            player.sendMessage(ChatColor.RED + "District: Error that region does not exist");
             return;
         }
         if (r.isOwner(player)) {
@@ -108,14 +94,9 @@ public class Commands {
         return;
     }
 
-    public static void delMember(Player player, String[] args, final District district, int count) {
-        if (args.length != count) {
+    public static void delMember(Player player, String[] args, final District district, Region r) {
+        if (args.length != 3) {
             invalidArgs(player);
-            return;
-        }
-        Region r = Regions.getRegion(args[1]);
-        if (r == null) {
-            player.sendMessage(ChatColor.RED + "District: Error that region does not exist");
             return;
         }
         if (r.isOwner(player)) {
@@ -146,14 +127,9 @@ public class Commands {
         }
     }
 
-    public static void listMembers(Player player, String[] args, int count) {
-        if (args.length != count) {
+    public static void listMembers(Player player, String[] args, Region r) {
+        if (args.length != 2) {
             invalidArgs(player);
-            return;
-        }
-        Region r = Regions.getRegion(args[1]);
-        if (r == null) {
-            player.sendMessage(ChatColor.RED + "District: Error that region does not exist");
             return;
         }
         String peeps = "";
@@ -162,9 +138,9 @@ public class Commands {
                 peeps += member + ", ";
             }
             if (peeps != "") {
-                player.sendMessage(ChatColor.GREEN + "District: " + args[1] + " has these members: " + peeps);
+                player.sendMessage(ChatColor.GREEN + "District: " + r.getName() + " has these members: " + peeps);
             } else {
-                player.sendMessage(ChatColor.GREEN + "District: " + args[1] + " has no members");
+                player.sendMessage(ChatColor.GREEN + "District: " + r.getName() + " has no members");
             }
         } else {
             r.sendDeny(player);
@@ -173,6 +149,6 @@ public class Commands {
     }
 
     public static void invalidArgs(Player p) {
-        p.sendMessage(ChatColor.RED + "District: Invalid number of arguments for that command");
+        throw new CommandException("Invalid number of arguments for that command");   
     }
 }

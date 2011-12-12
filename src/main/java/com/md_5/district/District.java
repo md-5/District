@@ -1,9 +1,11 @@
 package com.md_5.district;
 
+import java.util.ArrayList;
 import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -36,49 +38,73 @@ public class District extends JavaPlugin {
             return onConsoleCommand(sender, command, label, args);
         }
     }
-
+    
     public boolean onPlayerCommand(Player player, Command command, String label, String[] args) {
-        if (args.length == 0) {
-            player.sendMessage(ChatColor.GOLD + "District by md_5, the following commands may be used at this time:");
-            player.sendMessage(ChatColor.GOLD + "/district claim [size] [region]");
-            player.sendMessage(ChatColor.GOLD + "/district show [region]");
-            player.sendMessage(ChatColor.GOLD + "/district remove [region]");
-            player.sendMessage(ChatColor.GOLD + "/district list");
-            player.sendMessage(ChatColor.GOLD + "/district addmember [region] [player]");
-            player.sendMessage(ChatColor.GOLD + "/district delmember [region] [player]");
-            player.sendMessage(ChatColor.GOLD + "/district listmembers [region]");
-            return true;
+        try {
+            if (args.length == 0) {
+                player.sendMessage(ChatColor.GOLD + "District by md_5, the following commands may be used at this time:");
+                player.sendMessage(ChatColor.GOLD + "/district claim [size] [region]");
+                player.sendMessage(ChatColor.GOLD + "/district show [region]");
+                player.sendMessage(ChatColor.GOLD + "/district remove [region]");
+                player.sendMessage(ChatColor.GOLD + "/district list");
+                player.sendMessage(ChatColor.GOLD + "/district addmember [region] [player]");
+                player.sendMessage(ChatColor.GOLD + "/district delmember [region] [player]");
+                player.sendMessage(ChatColor.GOLD + "/district listmembers [region]");
+                return true;
+            }
+            if (args[0].equalsIgnoreCase("claim")) {
+                Commands.claim(player, args, this, 3);
+                return true;
+            }
+            if (args[0].equalsIgnoreCase("show")) {
+                Commands.show(player, args, getRegion(player, args));
+                return true;
+            }
+            if (args[0].equalsIgnoreCase("remove")) {
+                Commands.remove(player, args, this, getRegion(player, args));
+                return true;
+            }
+            if (args[0].equalsIgnoreCase("addmember")) {
+                Commands.addMember(player, args, this, getRegion(player, args));
+                return true;
+            }
+            if (args[0].equalsIgnoreCase("delmember")) {
+                Commands.delMember(player, args, this, getRegion(player, args));
+                return true;
+            }
+            if (args[0].equalsIgnoreCase("list")) {
+                Commands.list(player);
+                return true;
+            }
+            if (args[0].equalsIgnoreCase("listmembers")) {
+                Commands.listMembers(player, args, getRegion(player, args));
+                return true;
+            }
+            player.sendMessage(ChatColor.RED + "District: That is not a valid command");
+        } catch(CommandException e) {
+            player.sendMessage(ChatColor.RED + "District: " + e.getMessage());
         }
-        if (args[0].equalsIgnoreCase("claim")) {
-            Commands.claim(player, args, this, 3);
-            return true;
-        }
-        if (args[0].equalsIgnoreCase("show")) {
-            Commands.show(player, args, 2);
-            return true;
-        }
-        if (args[0].equalsIgnoreCase("remove")) {
-            Commands.remove(player, args, this, 2);
-            return true;
-        }
-        if (args[0].equalsIgnoreCase("addmember")) {
-            Commands.addMember(player, args, this, 3);
-            return true;
-        }
-        if (args[0].equalsIgnoreCase("delmember")) {
-            Commands.delMember(player, args, this, 3);
-            return true;
-        }
-        if (args[0].equalsIgnoreCase("list")) {
-            Commands.list(player);
-            return true;
-        }
-        if (args[0].equalsIgnoreCase("listmembers")) {
-            Commands.listMembers(player, args, 2);
-            return true;
-        }
-        player.sendMessage(ChatColor.RED + "District: That is not a valid command");
         return true;
+	}
+    
+    private Region getRegion(Player player, String[] args) {
+        if(args[1].trim().equals("-")) {
+            ArrayList<Region> regions = Util.getRegions(player.getLocation());
+            if(regions == null) {
+                throw new CommandException("Unable to use '-' operator when not in a region");
+            }
+            if(regions.size() != 1) {
+                throw new CommandException("Unable to use '-' operator when in multiple regions");
+            }
+            return regions.get(0);
+        }
+        else {
+            Region r = Regions.getRegion(args[1]);
+            if (r == null) {
+                throw new CommandException("Region does not exist");
+            }
+        }
+        return Regions.getRegion(args[1]);
     }
 
     public boolean onConsoleCommand(CommandSender sender, Command command, String label, String[] args) {
