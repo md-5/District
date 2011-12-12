@@ -14,7 +14,6 @@ public class Region {
     private World w;
     private String owner;
     private List<String> members;
-    ;
     private String greeting;
     private String farewell;
     private ChunkGrid grid;
