@@ -1,13 +1,14 @@
 package com.md_5.district;
 
+import java.util.Collection;
 import java.util.HashMap;
 
 public class Regions {
 
     private static HashMap<String, Region> regions = new HashMap<String, Region>();
 
-    public static HashMap<String, Region> getRegions() {
-        return regions;
+    public static Collection<Region> getRegions() {
+        return regions.values();
     }
 
     public static void addRegion(Region region) {

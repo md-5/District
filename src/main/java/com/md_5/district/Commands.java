@@ -80,7 +80,7 @@ public class Commands {
             invalidArgs(player);
             return;
         }
-        if (r.isOwner(player)) {
+        if (r.canAdmin(player)) {
             Regions.removeRegion(args[1]);
             Loader.remove(district, r);
             player.sendMessage(ChatColor.GREEN + "District: Region " + r.getName() + " removed");
@@ -94,7 +94,7 @@ public class Commands {
             invalidArgs(player);
             return;
         }
-        if (r.isOwner(player)) {
+        if (r.canAdmin(player)) {
             if (!r.isMember(args[2])) {
                 r.addMember(args[2]);
                 Loader.save(district, r);
@@ -113,7 +113,7 @@ public class Commands {
             invalidArgs(player);
             return;
         }
-        if (r.isOwner(player)) {
+        if (r.canAdmin(player)) {
             if (r.isMember(args[2])) {
                 r.removeMember(args[2]);
                 Loader.save(district, r);
@@ -128,14 +128,25 @@ public class Commands {
     }
 
     public static void list(Player player) {
-        String regions = "";
-        for (Region r : Regions.getRegions().values()) {
+        String owns = "";
+        String isMemberOf = "";
+        for (Region r : Regions.getRegions()) {
             if (r.isOwner(player)) {
-                regions += r.getName() + ", ";
+                owns += r.getName() + ", ";
+            }
+            if(r.isMember(player)) {
+                isMemberOf += r.getName() + ", ";
             }
         }
-        if (!regions.equals("")) {
-            player.sendMessage(ChatColor.GREEN + "District: You own these regions: " + regions);
+        if(!isMemberOf.equals("")) {
+            player.sendMessage(ChatColor.GREEN + "District: You are a member of these regions: " + isMemberOf);
+        }
+        else {
+            player.sendMessage(ChatColor.GREEN + "District: You are not a member of any regions");
+        }
+        
+        if (!owns.equals("")) {
+            player.sendMessage(ChatColor.GREEN + "District: You own these regions: " + owns);
         } else {
             player.sendMessage(ChatColor.GREEN + "District: You own no regions");
         }
@@ -147,7 +158,7 @@ public class Commands {
             return;
         }
         String peeps = "";
-        if (r.isOwner(player)) {
+        if (r.canAdmin(player)) {
             for (String member : r.getMembers()) {
                 peeps += member + ", ";
             }

@@ -30,7 +30,7 @@ public class Util {
         // Regions that may be possible
         ArrayList<Region> applicableRegions = new ArrayList<Region>();
         // Populate applicable regions
-        for (Region region : Regions.getRegions().values()) {
+        for (Region region : Regions.getRegions()) {
             for (Chunk chunk : region.getChunkGrid().getChunkGrid()) {
                 if (chunk.getWorld() == world) {
                     if (compareChunks(chunk, eventChunk)) {
@@ -103,7 +103,7 @@ public class Util {
 
     public static int getTotalSize(String player) {
         int num = 0;
-        for (Region r : Regions.getRegions().values()) {
+        for (Region r : Regions.getRegions()) {
             if (r.getOwner().equals(player)) {
                 num += r.getSize();
             }

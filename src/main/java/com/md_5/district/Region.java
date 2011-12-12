@@ -60,12 +60,19 @@ public class Region {
         return owner;
     }
 
-    public boolean isOwner(Player p) {
-        String player = p.getName();
-        if (player.equals(owner) || p.hasPermission("district.ignore")) {
+    public boolean canAdmin(Player p) {
+        if (isOwner(p) || p.hasPermission("district.ignore")) {
             return true;
         }
         return false;
+    }
+    
+    public boolean isOwner(String name) {
+        return owner.equals(name);
+    }
+    
+    public boolean isOwner(Player p) {
+        return isOwner(p.getName());
     }
 
     public void setOwner(String owner) {
@@ -166,5 +173,9 @@ public class Region {
             }
         }
         return (int) Math.cbrt(size);
+    }
+
+    public boolean isMember(Player player) {
+        return isMember(player.getName());
     }
 }
