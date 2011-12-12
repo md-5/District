@@ -101,11 +101,11 @@ public class Util {
         p.sendBlockChange(loc, b, (byte) 0);
     }
 
-    public static int getTotalSize(String player) {
+    public static int getTotalVolume(String player) {
         int num = 0;
         for (Region r : Regions.getRegions()) {
             if (r.getOwner().equals(player)) {
-                num += r.getSize();
+                num += r.getVolume();
             }
         }
         return num;
@@ -132,8 +132,12 @@ public class Util {
         }
         return 0;
     }
+    
+    public static int getMaxVolume(Player player) {
+        return (int) Math.pow(getMaxSize(player), 3);
+    }
 
-    public static int getSize(Location l1, Location l2) {
+    public static int getVolume(Location l1, Location l2) {
         Location min = getMin(l1, l2);
         Location max = getMax(l1, l2);
         int start_x = min.getBlockX();
@@ -143,16 +147,7 @@ public class Util {
         int end_y = max.getBlockY();
         int end_z = max.getBlockZ();
 
-        int size = 0;
-
-        for (int x = start_x; x <= end_x; x++) {
-            for (int y = start_y; y <= end_y; y++) {
-                for (int z = start_z; z <= end_z; z++) {
-                    size++;
-                }
-            }
-        }
-        return (int) Math.cbrt(size);
+        return (int) (end_x - start_x) * (end_y - start_y) * (end_z - start_z);
     }
 
     public static Location getMin(Location l1, Location l2) {

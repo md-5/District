@@ -1,12 +1,14 @@
 package com.md_5.district;
 
 import java.util.ArrayList;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 
 public class Commands {
 
@@ -41,7 +43,7 @@ public class Commands {
         point1.add(size, height, size);
         point2.add(-size, -size, -size);
 
-        if (((Util.getTotalSize(player.getName()) + Util.getSize(point1, point2)) > Util.getMaxSize(player)) && Util.getMaxSize(player) != -1) {
+        if (((Util.getTotalVolume(player.getName()) + Util.getVolume(point1, point2)) > Util.getMaxVolume(player)) && Util.getMaxVolume(player) != -1) {
             player.sendMessage(ChatColor.RED + "District: You cannot claim a region that big!");
             return;
         }
@@ -69,8 +71,10 @@ public class Commands {
         }
         if (r.canUse(player)) {
             Util.outline(player, r);
-            int size = r.getSize();
-            player.sendMessage(ChatColor.GREEN + "District: Your " + size + "x" + size + "x" + size + " region has been outlined just for you");
+            Vector size = r.getSize();
+            player.sendMessage(ChatColor.GREEN + "District: Your " + size.getBlockX() + 
+                    "x" + size.getBlockY() + "x" + size.getBlockZ() + 
+                    " region has been outlined just for you");
         } else {
             r.sendDeny(player);
         }

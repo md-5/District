@@ -5,6 +5,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 
 public class Region {
 
@@ -153,7 +154,7 @@ public class Region {
                 Math.max(l1.getBlockY(), l2.getBlockY()), Math.max(l1.getBlockZ(), l2.getBlockZ()));
     }
 
-    public int getSize() {
+    public Vector getSize() {
         Location min = getMin();
         Location max = getMax();
         int start_x = min.getBlockX();
@@ -163,19 +164,15 @@ public class Region {
         int end_y = max.getBlockY();
         int end_z = max.getBlockZ();
 
-        int size = 0;
-
-        for (int x = start_x; x <= end_x; x++) {
-            for (int y = start_y; y <= end_y; y++) {
-                for (int z = start_z; z <= end_z; z++) {
-                    size++;
-                }
-            }
-        }
-        return (int) Math.cbrt(size);
+        return new Vector(end_x - start_x, end_y - start_y, end_z - start_z);
     }
 
     public boolean isMember(Player player) {
         return isMember(player.getName());
+    }
+
+    public int getVolume() {
+        Vector size = getSize();
+        return (int) (size.getX() * size.getY() * size.getZ());
     }
 }
