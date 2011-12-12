@@ -26,7 +26,7 @@ public class DistrictBlockListener extends BlockListener {
         // Event details
         Player eventPlayer = event.getPlayer();
         Location eventLocation = event.getBlock().getLocation();
-
+        
         // Regions the block is in
         ArrayList<Region> currentRegionSet = Util.getRegions(eventLocation);
         // Save resources
@@ -48,7 +48,7 @@ public class DistrictBlockListener extends BlockListener {
         // Event details
         Player eventPlayer = event.getPlayer();
         Location eventLocation = event.getBlock().getLocation();
-
+        
         // Regions the block is in
         ArrayList<Region> currentRegionSet = Util.getRegions(eventLocation);
         // Save resources

@@ -8,7 +8,11 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import com.griefcraft.lwc.LWC;
+import com.griefcraft.lwc.LWCPlugin;
 
 public class District extends JavaPlugin {
 
@@ -17,10 +21,19 @@ public class District extends JavaPlugin {
     private DistrictBlockListener blockListener;
     @SuppressWarnings("unused")
     private DistrictPlayerListener playerListener;
+    
+    public LWC lwc = null;
 
     public void onEnable() {
         Config.load(this);
         Loader.load(this);
+
+        // Find the LWC plugin and get access to it's API
+        Plugin lwcPlugin = getServer().getPluginManager().getPlugin("LWC");
+        if(lwcPlugin != null) {
+            lwc = ((LWCPlugin) lwcPlugin).getLWC();
+        }
+        
         blockListener = new DistrictBlockListener(this);
         playerListener = new DistrictPlayerListener(this);
         logger.info(String.format("District v%1$s by md_5 enabled", this.getDescription().getVersion()));
@@ -88,7 +101,10 @@ public class District extends JavaPlugin {
 	}
     
     private Region getRegion(Player player, String[] args) {
-        if(args[1].trim().equals("-")) {
+        if(args.length <= 1) {
+            throw new CommandException("You must supply a region name or '-'");
+        }
+        else if(args[1].trim().equals("-")) {
             ArrayList<Region> regions = Util.getRegions(player.getLocation());
             if(regions == null) {
                 throw new CommandException("Unable to use '-' operator when not in a region");

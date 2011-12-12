@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event.Type;
@@ -12,7 +14,6 @@ import org.bukkit.event.player.PlayerListener;
 
 public class DistrictPlayerListener extends PlayerListener {
 
-    @SuppressWarnings("unused")
     private final District plugin;
 
     public DistrictPlayerListener(final District plugin) {
@@ -24,14 +25,29 @@ public class DistrictPlayerListener extends PlayerListener {
     public void onPlayerInteract(PlayerInteractEvent event) {
         // Event details
         Player eventPlayer = event.getPlayer();
-        if (event.getClickedBlock() == null) {
+        
+        Block block = event.getClickedBlock();
+        
+        if (block == null) {
             return;
         }
-        Location eventLocation = event.getClickedBlock().getLocation();
+        
+        // Don't do anything for pressure plates
+        // (Fix for issue #1)
+        Material type = block.getType();
+        if(type == Material.WOOD_PLATE || type == Material.STONE_PLATE) {
+            return;
+        }
+        else if(plugin.lwc != null && plugin.lwc.findProtection(block) != null) {
+            // Let LWC handle it.
+            return;
+        }
+        
+        Location eventLocation = block.getLocation();
         // Regions the block is in
         ArrayList<Region> currentRegionSet = Util.getRegions(eventLocation);
         String regions = "";
-        // Check if they are denied from placing in ANY region he block is in
+        // Check if they are denied from placing in ANY region the block is in
         if (currentRegionSet != null) {
             for (Region r : currentRegionSet) {
                 if (eventPlayer.hasPermission("district.wand") && eventPlayer.getItemInHand().getTypeId() == Config.wand) {
