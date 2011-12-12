@@ -56,13 +56,14 @@ public class District extends JavaPlugin {
         try {
             if (args.length == 0) {
                 player.sendMessage(ChatColor.GOLD + "District by md_5, the following commands may be used at this time:");
-                player.sendMessage(ChatColor.GOLD + "/district claim [size] [region]");
-                player.sendMessage(ChatColor.GOLD + "/district show [region]");
-                player.sendMessage(ChatColor.GOLD + "/district remove [region]");
+                player.sendMessage(ChatColor.GOLD + "/district claim <size> <region>");
+                player.sendMessage(ChatColor.GOLD + "/district show <region>");
+                player.sendMessage(ChatColor.GOLD + "/district remove <region>");
                 player.sendMessage(ChatColor.GOLD + "/district list");
-                player.sendMessage(ChatColor.GOLD + "/district addmember [region] [player]");
-                player.sendMessage(ChatColor.GOLD + "/district delmember [region] [player]");
-                player.sendMessage(ChatColor.GOLD + "/district listmembers [region]");
+                player.sendMessage(ChatColor.GOLD + "/district listall [player]");
+                player.sendMessage(ChatColor.GOLD + "/district addmember <region> <player>");
+                player.sendMessage(ChatColor.GOLD + "/district delmember <region> <player>");
+                player.sendMessage(ChatColor.GOLD + "/district listmembers <region>");
                 return true;
             }
             if (args[0].equalsIgnoreCase("claim")) {
