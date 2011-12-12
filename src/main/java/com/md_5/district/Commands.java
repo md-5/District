@@ -38,6 +38,11 @@ public class Commands {
             player.sendMessage(ChatColor.RED + "District: Region " + args[2] + " is already claimed");
             return;
         }
+        if (Util.isOverlapping(point1, point2)) {
+            player.sendMessage(ChatColor.RED + "District: Error! A region already exists here");
+            return;
+        }
+
         Region creation = new Region(point1.getWorld(), point1, point2, player.getName(), new ArrayList<String>(), args[2]);
         Regions.addRegion(creation);
         Loader.save(district, creation);

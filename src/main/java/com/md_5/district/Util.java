@@ -1,13 +1,10 @@
 package com.md_5.district;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
 
 public class Util {
 
@@ -115,6 +112,9 @@ public class Util {
     }
 
     public static int getMaxSize(Player player) {
+        if (player.hasPermission("district.infinite")) {
+            return -1;
+        }
         if (player.hasPermission("district.xlarge")) {
             return Config.xlarge;
         }
@@ -130,10 +130,7 @@ public class Util {
         if (player.hasPermission("district.xsmall")) {
             return Config.xsmall;
         }
-        if (player.hasPermission("district.infinite")) {
-            return 0;
-        }
-        return -1;
+        return 0;
     }
 
     public static int getSize(Location l1, Location l2) {
@@ -166,5 +163,34 @@ public class Util {
     public static Location getMax(Location l1, Location l2) {
         return new Location(l1.getWorld(), Math.max(l1.getBlockX(), l2.getBlockX()),
                 Math.max(l1.getBlockY(), l2.getBlockY()), Math.max(l1.getBlockZ(), l2.getBlockZ()));
+    }
+
+    public static boolean isOverlapping(Location l1, Location l2) {
+        Location min = getMin(l1, l2);
+        Location max = getMax(l1, l2);
+
+        int start_x = min.getBlockX();
+        int start_y = min.getBlockY();
+        int start_z = min.getBlockZ();
+        int end_x = max.getBlockX();
+        int end_y = max.getBlockY();
+        int end_z = max.getBlockZ();
+
+        ArrayList<Location> blocks = new ArrayList<Location>();
+
+        for (int x = start_x; x <= end_x; x++) {
+            for (int y = start_y; y <= end_y; y++) {
+                for (int z = start_z; z <= end_z; z++) {
+                    blocks.add(new Location(min.getWorld(), x, y, z));
+                }
+            }
+        }
+        for (Location loc : blocks) {
+            ArrayList<Region> currentRegionSet = Util.getRegions(loc);
+            if (currentRegionSet != null) {
+                return true;
+            }
+        }
+        return false;
     }
 }
