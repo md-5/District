@@ -3,6 +3,7 @@ package com.md_5.district;
 import java.util.ArrayList;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.command.CommandException;
 import org.bukkit.entity.Player;
 
@@ -13,22 +14,30 @@ public class Commands {
             invalidArgs(player);
             return;
         }
-        int size;
+        int size, height;
         try {
             size = Integer.parseInt(args[1]);
         } catch (NumberFormatException ex) {
-            player.sendMessage(ChatColor.RED + "District: " + args[1] + " is not a valid number");
-            return;
+            throw new CommandException(args[1] + " is not a valid number");
         }
         if (size % 2 == 0) {
-            player.sendMessage(ChatColor.RED + "District: Size must be odd");
-            return;
+            throw new CommandException("Size must be odd");
         }
+        
+        World world = player.getWorld();
+        
+        // Limit height to world height
+        height = Math.min(size, world.getMaxHeight());
+        
         size /= 2;
+        height /= 2;
+        
         size = (int) Math.floor(size);
+        height = (int) Math.floor(size);
+        
         Location point1 = player.getLocation();
         Location point2 = player.getLocation();
-        point1.add(size, size, size);
+        point1.add(size, height, size);
         point2.add(-size, -size, -size);
 
         if (((Util.getTotalSize(player.getName()) + Util.getSize(point1, point2)) > Util.getMaxSize(player)) && Util.getMaxSize(player) != -1) {
