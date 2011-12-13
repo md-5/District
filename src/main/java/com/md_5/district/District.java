@@ -58,6 +58,7 @@ public class District extends JavaPlugin {
                 player.sendMessage(ChatColor.GOLD + "District by md_5, the following commands may be used at this time:");
                 player.sendMessage(ChatColor.GOLD + "/district claim <size> <region>");
                 player.sendMessage(ChatColor.GOLD + "/district show <region>");
+                player.sendMessage(ChatColor.GOLD + "/district hide <region>");
                 player.sendMessage(ChatColor.GOLD + "/district remove <region>");
                 player.sendMessage(ChatColor.GOLD + "/district list");
                 player.sendMessage(ChatColor.GOLD + "/district listall [player]");
@@ -72,6 +73,10 @@ public class District extends JavaPlugin {
             }
             if (args[0].equalsIgnoreCase("show")) {
                 Commands.show(player, args, getRegion(player, args));
+                return true;
+            }
+            if (args[0].equalsIgnoreCase("hide")) {
+                Commands.hide(player, args, getRegion(player, args));
                 return true;
             }
             if (args[0].equalsIgnoreCase("remove")) {

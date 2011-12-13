@@ -59,6 +59,9 @@ public class Commands {
         Loader.save(district, creation);
         player.sendMessage(ChatColor.GREEN + "District: A " + args[1] + "x" + args[1] + "x"
                 + args[1] + " region named " + creation.getName() + " has been claimed for you!");
+        
+        Util.timedOutline(player, creation, 80, district);
+        
         return;
     }
 
@@ -71,6 +74,19 @@ public class Commands {
             Util.outline(player, r);
             int size = r.getSize();
             player.sendMessage(ChatColor.GREEN + "District: Your " + size + "x" + size + "x" + size + " region has been outlined just for you");
+        } else {
+            r.sendDeny(player);
+        }
+    }
+    
+    public static void hide(Player player, String[] args, Region r) {
+        if (args.length != 2) {
+            invalidArgs(player);
+        }
+        if (r.canUse(player)) {
+            Util.removeOutline(player, r);
+            int size = r.getSize();
+            player.sendMessage(ChatColor.GREEN + "District: Your " + size + "x" + size + "x" + size + " region has been hidden");
         } else {
             r.sendDeny(player);
         }

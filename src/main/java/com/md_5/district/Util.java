@@ -1,6 +1,7 @@
 package com.md_5.district;
 
 import java.util.ArrayList;
+
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -95,6 +96,60 @@ public class Util {
             }
         }
         return;
+    }
+    
+    public static void removeOutline(Player p, Region r) {
+        Location min = r.getMin();
+        Location max = r.getMax();
+        World w = min.getWorld();
+
+        int minX = min.getBlockX();
+        int minY = min.getBlockY();
+        int minZ = min.getBlockZ();
+        int maxX = max.getBlockX();
+        int maxY = max.getBlockY();
+        int maxZ = max.getBlockZ();
+
+        int block;
+        
+        for (int x = minX; x <= maxX; ++x) {
+            for (int y = minY; y <= maxY; ++y) {
+                block = w.getBlockTypeIdAt(x, y, minZ);
+                setBlockClient(new Location(w, x, y, minZ), block, p);
+                
+                block = w.getBlockTypeIdAt(x, y, maxZ);
+                setBlockClient(new Location(w, x, y, maxZ), block, p);
+            }
+        }
+        for (int y = minY; y <= maxY; ++y) {
+            for (int z = minZ; z <= maxZ; ++z) {
+                block = w.getBlockTypeIdAt(minX, y, z);
+                setBlockClient(new Location(w, minX, y, z), block, p);
+                
+                block = w.getBlockTypeIdAt(maxX, y, z);
+                setBlockClient(new Location(w, maxX, y, z), block, p);
+            }
+        }
+        for (int z = minZ; z <= maxZ; ++z) {
+            for (int x = minX; x <= maxX; ++x) {
+                block = w.getBlockTypeIdAt(x, minY, z);
+                setBlockClient(new Location(w, x, minY, z), block, p);
+                
+                block = w.getBlockTypeIdAt(x, maxY, z);
+                setBlockClient(new Location(w, x, maxY, z), block, p);
+            }
+        }
+        return;
+    }
+    
+    public static void timedOutline(final Player p, final Region r, 
+            int ticks, District plugin) {
+        outline(p, r);
+        plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable() {
+            public void run() {
+                removeOutline(p, r);
+            }
+        }, ticks);
     }
 
     public static void setBlockClient(Location loc, int b, Player p) {
