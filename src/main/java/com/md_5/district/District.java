@@ -86,6 +86,7 @@ public class District extends JavaPlugin {
             }
             if (args[0].equalsIgnoreCase("setowner")) {
                 Commands.setOwner(player, args, this, getRegion(player, args));
+                return true;
             }
             if (args[0].equalsIgnoreCase("addmember")) {
                 Commands.addMember(player, args, this, getRegion(player, args));
