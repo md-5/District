@@ -24,7 +24,7 @@ permissions:
         description: The ability to use the /ds listall command
         default: op
     district.setowner:
-        description: The ability to give a region to others
+        description: The ability to give a region to others (may allow infinite regions)
         default: op
     district.wand:
         description: The ability to check applicable regions
