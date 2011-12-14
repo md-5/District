@@ -3,6 +3,7 @@ package com.md_5.district;
 import java.util.ArrayList;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandSender;
@@ -220,5 +221,28 @@ public class Commands {
 
     public static void invalidArgs(Player p) {
         throw new CommandException("Invalid number of arguments for that command");   
+    }
+
+    public static void setOwner(Player player, String[] args,
+            District district, Region region) {
+        if(!player.hasPermission("district.setowner")) {
+            throw new CommandException("You don't have permission to access that command!");
+        }
+        
+        if(args.length != 3) {
+          invalidArgs(player);
+          return;
+        }
+        
+        String newOwnerName = args[2];
+        OfflinePlayer newOwner = district.getServer().getOfflinePlayer(newOwnerName);
+        
+        if(!newOwner.hasPlayedBefore()) {
+            throw new CommandException(newOwnerName + " has never been on this server!");
+        }
+        
+        region.setOwner(newOwnerName);
+        player.sendMessage(ChatColor.GREEN + "District: Owner of region " + region.getName() + 
+                " set to " + newOwnerName);
     }
 }

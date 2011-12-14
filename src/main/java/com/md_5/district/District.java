@@ -62,6 +62,7 @@ public class District extends JavaPlugin {
                 player.sendMessage(ChatColor.GOLD + "/district remove <region>");
                 player.sendMessage(ChatColor.GOLD + "/district list");
                 player.sendMessage(ChatColor.GOLD + "/district listall [player]");
+                player.sendMessage(ChatColor.GOLD + "/district setowner <region> <player>");
                 player.sendMessage(ChatColor.GOLD + "/district addmember <region> <player>");
                 player.sendMessage(ChatColor.GOLD + "/district delmember <region> <player>");
                 player.sendMessage(ChatColor.GOLD + "/district listmembers <region>");
@@ -82,6 +83,9 @@ public class District extends JavaPlugin {
             if (args[0].equalsIgnoreCase("remove")) {
                 Commands.remove(player, args, this, getRegion(player, args));
                 return true;
+            }
+            if (args[0].equalsIgnoreCase("setowner")) {
+                Commands.setOwner(player, args, this, getRegion(player, args));
             }
             if (args[0].equalsIgnoreCase("addmember")) {
                 Commands.addMember(player, args, this, getRegion(player, args));
