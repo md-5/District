@@ -157,12 +157,12 @@ public class Region {
     public Vector getSize() {
         Location min = getMin();
         Location max = getMax();
-        double start_x = min.getX();
-        double start_y = min.getY();
-        double start_z = min.getZ();
-        double end_x = max.getX();
-        double end_y = max.getY();
-        double end_z = max.getZ();
+        int start_x = min.getBlockX();
+        int start_y = min.getBlockY();
+        int start_z = min.getBlockZ();
+        int end_x = max.getBlockX();
+        int end_y = max.getBlockY();
+        int end_z = max.getBlockZ();
 
         return new Vector(end_x - start_x, end_y - start_y, end_z - start_z);
     }

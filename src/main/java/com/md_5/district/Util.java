@@ -116,43 +116,25 @@ public class Util {
             return -1;
         }
         if (player.hasPermission("district.xlarge")) {
-            return Config.xlargeSize;
+            return Config.xlarge;
         }
         if (player.hasPermission("district.large")) {
-            return Config.largeSize;
+            return Config.large;
         }
         if (player.hasPermission("district.medium")) {
-            return Config.mediumSize;
+            return Config.medium;
         }
         if (player.hasPermission("district.small")) {
-            return Config.smallSize;
+            return Config.small;
         }
         if (player.hasPermission("district.xsmall")) {
-            return Config.xsmallSize;
+            return Config.xsmall;
         }
         return 0;
     }
     
     public static int getMaxVolume(Player player) {
-        if (player.hasPermission("district.infinite")) {
-            return -1;
-        }
-        if (player.hasPermission("district.xlarge")) {
-            return Config.xlargeVolume;
-        }
-        if (player.hasPermission("district.large")) {
-            return Config.largeVolume;
-        }
-        if (player.hasPermission("district.medium")) {
-            return Config.mediumVolume;
-        }
-        if (player.hasPermission("district.small")) {
-            return Config.smallVolume;
-        }
-        if (player.hasPermission("district.xsmall")) {
-            return Config.xsmallVolume;
-        }
-        return 0;
+        return (int) Math.pow(getMaxSize(player), 3);
     }
 
     public static int getVolume(Location l1, Location l2) {
