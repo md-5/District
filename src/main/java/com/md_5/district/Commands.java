@@ -45,6 +45,7 @@ public class Commands {
 
         if (((Util.getTotalVolume(player.getName()) + Util.getVolume(point1, point2)) > Util.getMaxVolume(player)) && Util.getMaxVolume(player) != -1) {
             player.sendMessage(ChatColor.RED + "District: You cannot claim a region that big!");
+            player.sendMessage(ChatColor.RED + "District: Use /district quota to view your remaining quota");
             return;
         }
         if (Regions.getRegion(args[2]) != null) {
@@ -62,6 +63,14 @@ public class Commands {
         player.sendMessage(ChatColor.GREEN + "District: A " + args[1] + "x" + args[1] + "x"
                 + args[1] + " region named " + creation.getName() + " has been claimed for you!");
         return;
+    }
+    
+    public static void quota(Player player, String[] args) {
+        int used = Util.getTotalVolume(player);
+        int total = Util.getMaxVolume(player);
+        String totalStr = total == -1?"infinite":""+total;
+        player.sendMessage(ChatColor.GREEN + "District: You have claimed " + used + 
+                " blocks of your " + totalStr + " block quota.");
     }
 
     public static void show(Player player, String[] args, Region r) {

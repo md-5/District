@@ -134,7 +134,14 @@ public class Util {
     }
     
     public static int getMaxVolume(Player player) {
-        return (int) Math.pow(getMaxSize(player), 3);
+        int maxSize = getMaxSize(player);
+        if(maxSize == -1) {
+            return -1;
+        }
+        else
+        {
+          return (int) Math.pow(getMaxSize(player), 3);
+        }
     }
 
     public static int getVolume(Location l1, Location l2) {
@@ -187,5 +194,9 @@ public class Util {
             }
         }
         return false;
+    }
+
+    public static int getTotalVolume(Player player) {
+        return getTotalVolume(player.getName());
     }
 }
