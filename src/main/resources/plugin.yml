@@ -1,5 +1,5 @@
 name: District
-version: 1.0.3
+version: 1.0.4
 description: Simple self-managed land claiming plugin for Shadowraze
 author: md_5
 authors: [Na7coldwater]
@@ -19,6 +19,12 @@ permissions:
         default: true
     district.ignore:
         description: The ability to override District protections
+        default: op
+    district.listall:
+        description: The ability to use the /ds listall command
+        default: op
+    district.setowner:
+        description: The ability to give a region to others (may allow infinite regions)
         default: op
     district.wand:
         description: The ability to check applicable regions

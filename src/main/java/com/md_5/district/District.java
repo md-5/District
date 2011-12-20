@@ -58,10 +58,12 @@ public class District extends JavaPlugin {
                 player.sendMessage(ChatColor.GOLD + "District by md_5, the following commands may be used at this time:");
                 player.sendMessage(ChatColor.GOLD + "/district claim <size> <region>");
                 player.sendMessage(ChatColor.GOLD + "/district show <region>");
+                player.sendMessage(ChatColor.GOLD + "/district hide <region>");
                 player.sendMessage(ChatColor.GOLD + "/district remove <region>");
                 player.sendMessage(ChatColor.GOLD + "/district list");
                 player.sendMessage(ChatColor.GOLD + "/district listall [player]");
                 player.sendMessage(ChatColor.GOLD + "/district quota");
+                player.sendMessage(ChatColor.GOLD + "/district setowner <region> <player>");
                 player.sendMessage(ChatColor.GOLD + "/district addmember <region> <player>");
                 player.sendMessage(ChatColor.GOLD + "/district delmember <region> <player>");
                 player.sendMessage(ChatColor.GOLD + "/district listmembers <region>");
@@ -75,8 +77,16 @@ public class District extends JavaPlugin {
                 Commands.show(player, args, getRegion(player, args));
                 return true;
             }
+            if (args[0].equalsIgnoreCase("hide")) {
+                Commands.hide(player, args, getRegion(player, args));
+                return true;
+            }
             if (args[0].equalsIgnoreCase("remove")) {
                 Commands.remove(player, args, this, getRegion(player, args));
+                return true;
+            }
+            if (args[0].equalsIgnoreCase("setowner")) {
+                Commands.setOwner(player, args, this, getRegion(player, args));
                 return true;
             }
             if (args[0].equalsIgnoreCase("addmember")) {

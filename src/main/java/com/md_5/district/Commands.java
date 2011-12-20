@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandSender;
@@ -62,6 +63,9 @@ public class Commands {
         Loader.save(district, creation);
         player.sendMessage(ChatColor.GREEN + "District: A " + args[1] + "x" + args[1] + "x"
                 + args[1] + " region named " + creation.getName() + " has been claimed for you!");
+        
+        Util.timedOutline(player, creation, 80, district);
+        
         return;
     }
     
@@ -84,6 +88,21 @@ public class Commands {
             player.sendMessage(ChatColor.GREEN + "District: Your " + (size.getBlockX() + 1) + 
                     "x" + (size.getBlockY() + 1) + "x" + (size.getBlockZ() + 1) + 
                     " region has been outlined just for you");
+        } else {
+            r.sendDeny(player);
+        }
+    }
+    
+    public static void hide(Player player, String[] args, Region r) {
+        if (args.length != 2) {
+            invalidArgs(player);
+        }
+        if (r.canUse(player)) {
+            Util.removeOutline(player, r);
+            Vector size = r.getSize();
+            player.sendMessage(ChatColor.GREEN + "District: Your " + (size.getBlockX() + 1) + 
+                    "x" + (size.getBlockY() + 1) + "x" + (size.getBlockZ() + 1) + 
+                    " region has been hidden");
         } else {
             r.sendDeny(player);
         }
@@ -217,5 +236,28 @@ public class Commands {
 
     public static void invalidArgs(Player p) {
         throw new CommandException("Invalid number of arguments for that command");   
+    }
+
+    public static void setOwner(Player player, String[] args,
+            District district, Region region) {
+        if(!player.hasPermission("district.setowner")) {
+            throw new CommandException("You don't have permission to access that command!");
+        }
+        
+        if(args.length != 3) {
+          invalidArgs(player);
+          return;
+        }
+        
+        String newOwnerName = args[2];
+        OfflinePlayer newOwner = district.getServer().getOfflinePlayer(newOwnerName);
+        
+        if(!newOwner.hasPlayedBefore()) {
+            throw new CommandException(newOwnerName + " has never been on this server!");
+        }
+        
+        region.setOwner(newOwnerName);
+        player.sendMessage(ChatColor.GREEN + "District: Owner of region " + region.getName() + 
+                " set to " + newOwnerName);
     }
 }
