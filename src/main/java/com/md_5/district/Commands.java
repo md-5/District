@@ -72,8 +72,8 @@ public class Commands {
         if (r.canUse(player)) {
             Util.outline(player, r);
             Vector size = r.getSize();
-            player.sendMessage(ChatColor.GREEN + "District: Your " + size.getBlockX() + 
-                    "x" + size.getBlockY() + "x" + size.getBlockZ() + 
+            player.sendMessage(ChatColor.GREEN + "District: Your " + (size.getBlockX() + 1) + 
+                    "x" + (size.getBlockY() + 1) + "x" + (size.getBlockZ() + 1) + 
                     " region has been outlined just for you");
         } else {
             r.sendDeny(player);
