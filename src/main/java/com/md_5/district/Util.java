@@ -2,7 +2,6 @@ package com.md_5.district;
 
 import java.util.ArrayList;
 
-import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -25,30 +24,9 @@ public class Util {
     }
 
     public static ArrayList<Region> getRegions(Location location) {
-        World world = location.getWorld();
-        Chunk eventChunk = world.getChunkAt(location);
-
-        // Regions that may be possible
-        ArrayList<Region> applicableRegions = new ArrayList<Region>();
-        // Populate applicable regions
-        for (Region region : Regions.getRegions()) {
-            for (Chunk chunk : region.getChunkGrid().getChunkGrid()) {
-                if (chunk.getWorld() == world) {
-                    if (compareChunks(chunk, eventChunk)) {
-                        if (!applicableRegions.contains(region)) {
-                            applicableRegions.add(region);
-                        }
-                    }
-                }
-            }
-        }
-        // Save resources
-        if (applicableRegions.isEmpty()) {
-            return null;
-        }
         // Select the exact region(s) they are in
         ArrayList<Region> currentRegionSet = new ArrayList<Region>();
-        for (Region reg : applicableRegions) {
+        for (Region reg : Regions.getRegions()) {
             if (Util.isInCuboid(location, reg.getL1(), reg.getL2())) {
                 currentRegionSet.add(reg);
             }
@@ -58,10 +36,6 @@ public class Util {
             return null;
         }
         return currentRegionSet;
-    }
-
-    public static boolean compareChunks(Chunk c1, Chunk c2) {
-        return (c1.getX() == c2.getX() && c1.getZ() == c2.getZ());
     }
 
     public static void outline(Player p, Region r) {

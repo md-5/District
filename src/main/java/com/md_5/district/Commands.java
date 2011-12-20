@@ -64,7 +64,7 @@ public class Commands {
         player.sendMessage(ChatColor.GREEN + "District: A " + args[1] + "x" + args[1] + "x"
                 + args[1] + " region named " + creation.getName() + " has been claimed for you!");
         
-        Util.timedOutline(player, creation, 80, district);
+        //Util.timedOutline(player, creation, 80, district);
         
         return;
     }

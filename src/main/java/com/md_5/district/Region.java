@@ -17,7 +17,6 @@ public class Region {
     private List<String> members;
     private String greeting;
     private String farewell;
-    private ChunkGrid grid;
 
     public Region(World w, Location l1, Location l2, String owner, List<String> members, String name) {
         this.w = w;
@@ -25,7 +24,6 @@ public class Region {
         this.l2 = l2;
         this.owner = owner;
         this.members = members;
-        this.grid = new ChunkGrid(l1, l2, this);
         this.name = name;
     }
 
@@ -102,10 +100,6 @@ public class Region {
 
     public void setFarewell(String farewell) {
         this.farewell = farewell;
-    }
-
-    public ChunkGrid getChunkGrid() {
-        return this.grid;
     }
 
     // Mesage sending
