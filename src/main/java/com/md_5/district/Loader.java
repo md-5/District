@@ -19,7 +19,7 @@ public class Loader {
         // Loop through all files
         for (File f : regionFiles) {
             // Load the file
-            CustomConfig configFile = new CustomConfig(plugin, f.getAbsolutePath());
+            CustomConfig configFile = new CustomConfig( f.getAbsolutePath());
             FileConfiguration config = configFile.getConfig();
             // Set and get the variables
             String name = config.getString("name");
@@ -51,7 +51,7 @@ public class Loader {
 
     public static void save(final District plugin, Region region) {
         // Initialise the config
-        CustomConfig configFile = new CustomConfig(plugin, plugin.getDataFolder()
+        CustomConfig configFile = new CustomConfig(plugin.getDataFolder()
                 + File.separator + "Regions" + File.separator + region.getName() + ".yml");
         FileConfiguration config = configFile.getConfig();
         // Save all the stuff

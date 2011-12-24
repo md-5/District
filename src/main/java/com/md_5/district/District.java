@@ -10,32 +10,26 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-
 import com.griefcraft.lwc.LWC;
 import com.griefcraft.lwc.LWCPlugin;
 
 public class District extends JavaPlugin {
 
     public static final Logger logger = Bukkit.getServer().getLogger();
-    @SuppressWarnings("unused")
-    private DistrictBlockListener blockListener;
-    @SuppressWarnings("unused")
-    private DistrictPlayerListener playerListener;
-    
     public LWC lwc = null;
 
     public void onEnable() {
+        // Load the files
         Config.load(this);
         Loader.load(this);
-
         // Find the LWC plugin and get access to it's API
         Plugin lwcPlugin = getServer().getPluginManager().getPlugin("LWC");
-        if(lwcPlugin != null) {
+        if (lwcPlugin != null) {
             lwc = ((LWCPlugin) lwcPlugin).getLWC();
         }
-        
-        blockListener = new DistrictBlockListener(this);
-        playerListener = new DistrictPlayerListener(this);
+        // Start listening
+        new DistrictBlockListener(this);
+        new DistrictPlayerListener(this);
         logger.info(String.format("District v%1$s by md_5 enabled", this.getDescription().getVersion()));
     }
 
@@ -51,7 +45,7 @@ public class District extends JavaPlugin {
             return onConsoleCommand(sender, command, label, args);
         }
     }
-    
+
     public boolean onPlayerCommand(Player player, Command command, String label, String[] args) {
         try {
             if (args.length == 0) {
@@ -114,27 +108,25 @@ public class District extends JavaPlugin {
                 return true;
             }
             player.sendMessage(ChatColor.RED + "District: That is not a valid command");
-        } catch(CommandException e) {
+        } catch (CommandException e) {
             player.sendMessage(ChatColor.RED + "District: " + e.getMessage());
         }
         return true;
-	}
-    
+    }
+
     private Region getRegion(Player player, String[] args) {
-        if(args.length <= 1) {
+        if (args.length <= 1) {
             throw new CommandException("You must supply a region name or '-'");
-        }
-        else if(args[1].trim().equals("-")) {
+        } else if (args[1].trim().equals("-")) {
             ArrayList<Region> regions = Util.getRegions(player.getLocation());
-            if(regions == null) {
+            if (regions == null) {
                 throw new CommandException("Unable to use '-' operator when not in a region");
             }
-            if(regions.size() != 1) {
+            if (regions.size() != 1) {
                 throw new CommandException("Unable to use '-' operator when in multiple regions");
             }
             return regions.get(0);
-        }
-        else {
+        } else {
             Region r = Regions.getRegion(args[1]);
             if (r == null) {
                 throw new CommandException("Region does not exist");

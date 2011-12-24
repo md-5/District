@@ -12,11 +12,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 
 public class DistrictBlockListener extends BlockListener {
 
-    @SuppressWarnings("unused")
-    private final District plugin;
-
     public DistrictBlockListener(final District plugin) {
-        this.plugin = plugin;
         Bukkit.getServer().getPluginManager().registerEvent(Type.BLOCK_BREAK, this, Priority.Normal, plugin);
         Bukkit.getServer().getPluginManager().registerEvent(Type.BLOCK_PLACE, this, Priority.Normal, plugin);
     }
@@ -25,8 +21,7 @@ public class DistrictBlockListener extends BlockListener {
     public void onBlockPlace(BlockPlaceEvent event) {
         // Event details
         Player eventPlayer = event.getPlayer();
-        Location eventLocation = event.getBlock().getLocation();
-        
+        Location eventLocation = event.getBlock().getLocation();       
         // Regions the block is in
         ArrayList<Region> currentRegionSet = Util.getRegions(eventLocation);
         // Save resources
@@ -47,8 +42,7 @@ public class DistrictBlockListener extends BlockListener {
     public void onBlockBreak(BlockBreakEvent event) {
         // Event details
         Player eventPlayer = event.getPlayer();
-        Location eventLocation = event.getBlock().getLocation();
-        
+        Location eventLocation = event.getBlock().getLocation();       
         // Regions the block is in
         ArrayList<Region> currentRegionSet = Util.getRegions(eventLocation);
         // Save resources

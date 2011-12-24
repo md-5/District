@@ -1,11 +1,12 @@
 name: District
-version: 1.0.4
+version: 1.1
 description: Simple self-managed land claiming plugin for Shadowraze
 author: md_5
 authors: [Na7coldwater]
 website: https://github.com/Shadowraze/District
 
 main: com.md_5.district.District
+softdepend: [LWC]
 
 commands:
   district:
