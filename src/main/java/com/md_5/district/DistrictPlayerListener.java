@@ -26,10 +26,11 @@ public class DistrictPlayerListener extends PlayerListener {
         // Event details
         Player eventPlayer = event.getPlayer();
         Block block = event.getClickedBlock();
-         Location eventLocation = block.getLocation();
+
         if (block == null) {
             return;
         }
+
         // Don't do anything for pressure plates
         Material type = block.getType();
         if (type == Material.WOOD_PLATE || type == Material.STONE_PLATE) {
@@ -38,7 +39,8 @@ public class DistrictPlayerListener extends PlayerListener {
         if (plugin.lwc != null && plugin.lwc.findProtection(block) != null) {
             // Let LWC handle it.
             return;
-        }  
+        }
+        Location eventLocation = block.getLocation();
         // Regions the block is in
         ArrayList<Region> currentRegionSet = Util.getRegions(eventLocation);
         String regions = "";

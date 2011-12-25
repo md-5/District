@@ -71,7 +71,7 @@ public class Util {
         }
         return;
     }
-    
+
     public static void removeOutline(Player p, Region r) {
         Location min = r.getMin();
         Location max = r.getMax();
@@ -85,12 +85,12 @@ public class Util {
         int maxZ = max.getBlockZ();
 
         int block;
-        
+
         for (int x = minX; x <= maxX; ++x) {
             for (int y = minY; y <= maxY; ++y) {
                 block = w.getBlockTypeIdAt(x, y, minZ);
                 setBlockClient(new Location(w, x, y, minZ), block, p);
-                
+
                 block = w.getBlockTypeIdAt(x, y, maxZ);
                 setBlockClient(new Location(w, x, y, maxZ), block, p);
             }
@@ -99,7 +99,7 @@ public class Util {
             for (int z = minZ; z <= maxZ; ++z) {
                 block = w.getBlockTypeIdAt(minX, y, z);
                 setBlockClient(new Location(w, minX, y, z), block, p);
-                
+
                 block = w.getBlockTypeIdAt(maxX, y, z);
                 setBlockClient(new Location(w, maxX, y, z), block, p);
             }
@@ -108,18 +108,19 @@ public class Util {
             for (int x = minX; x <= maxX; ++x) {
                 block = w.getBlockTypeIdAt(x, minY, z);
                 setBlockClient(new Location(w, x, minY, z), block, p);
-                
+
                 block = w.getBlockTypeIdAt(x, maxY, z);
                 setBlockClient(new Location(w, x, maxY, z), block, p);
             }
         }
         return;
     }
-    
-    public static void timedOutline(final Player p, final Region r, 
+
+    public static void timedOutline(final Player p, final Region r,
             int ticks, District plugin) {
         outline(p, r);
         plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable() {
+
             public void run() {
                 removeOutline(p, r);
             }
@@ -161,15 +162,13 @@ public class Util {
         }
         return 0;
     }
-    
+
     public static int getMaxVolume(Player player) {
         int maxSize = getMaxSize(player);
-        if(maxSize == -1) {
+        if (maxSize == -1) {
             return -1;
-        }
-        else
-        {
-          return (int) Math.pow(getMaxSize(player), 3);
+        } else {
+            return (int) Math.pow(getMaxSize(player), 3);
         }
     }
 
@@ -183,7 +182,7 @@ public class Util {
         int end_y = max.getBlockY();
         int end_z = max.getBlockZ();
 
-        return (int) (end_x - start_x) * (end_y - start_y) * (end_z - start_z);
+        return (end_x - start_x) * (end_y - start_y) * (end_z - start_z);
     }
 
     public static Location getMin(Location l1, Location l2) {
@@ -199,28 +198,10 @@ public class Util {
     public static boolean isOverlapping(Location l1, Location l2) {
         Location min = getMin(l1, l2);
         Location max = getMax(l1, l2);
-
-        int start_x = min.getBlockX();
-        int start_y = min.getBlockY();
-        int start_z = min.getBlockZ();
-        int end_x = max.getBlockX();
-        int end_y = max.getBlockY();
-        int end_z = max.getBlockZ();
-
-        ArrayList<Location> blocks = new ArrayList<Location>();
-
-        for (int x = start_x; x <= end_x; x++) {
-            for (int y = start_y; y <= end_y; y++) {
-                for (int z = start_z; z <= end_z; z++) {
-                    blocks.add(new Location(min.getWorld(), x, y, z));
-                }
-            }
-        }
-        for (Location loc : blocks) {
-            ArrayList<Region> currentRegionSet = Util.getRegions(loc);
-            if (currentRegionSet != null) {
-                return true;
-            }
+        ArrayList<Region> currentRegionSet = Util.getRegions(min);
+        ArrayList<Region> currentRegionSet2 = Util.getRegions(max);
+        if (currentRegionSet != null || currentRegionSet2 != null) {
+            return true;
         }
         return false;
     }
