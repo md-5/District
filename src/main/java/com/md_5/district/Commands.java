@@ -62,7 +62,7 @@ public class Commands {
         Regions.addRegion(creation);
         Loader.save(district, creation);
         player.sendMessage(ChatColor.GREEN + "District: A " + args[1] + "x" + args[1] + "x"
-                + args[1] + " region named " + creation.getName() + " has been claimed for you!");
+                + args[1] + " (" + creation.getVolume() + " blocks) region named " + creation.getName() + " has been claimed for you!");
         
         //Util.timedOutline(player, creation, 80, district);
         
@@ -86,8 +86,8 @@ public class Commands {
             Util.outline(player, r);
             Vector size = r.getSize();
             player.sendMessage(ChatColor.GREEN + "District: Your " + (size.getBlockX() + 1) + 
-                    "x" + (size.getBlockY() + 1) + "x" + (size.getBlockZ() + 1) + 
-                    " region has been outlined just for you");
+                    "x" + (size.getBlockY() + 1) + "x" + (size.getBlockZ() + 1) + " (" +
+                    r.getVolume() + " blocks) region has been outlined just for you");
         } else {
             r.sendDeny(player);
         }
