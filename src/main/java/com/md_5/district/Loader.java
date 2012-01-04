@@ -46,18 +46,3 @@ public class Loader {
     public static void remove(Region r) {
     }
 }
-public ShadowPlayer addMySQLPlayer(String p) {
-        plugin.getDb().write("INSERT INTO " + plugin.getConf().getPrefix()
-                + "users (user) VALUES ('" + p + "')");
-        int id = plugin.getDb().getInt("SELECT id FROM " + plugin.getConf().getPrefix() + "users WHERE user = '" + p + "'");
-        return new ShadowPlayer(p, Races.NULL, "unset", id, plugin);
-    }
-
-    public void changeRace(Player p, Races race) {
-        ShadowPlayer rpg = plugin.getPlayerManager().getPlayer(p.getName());
-        plugin.getDb().write("UPDATE " + plugin.getConf().getPrefix() + "users SET race='" + race.getSingular() + "' WHERE id=" + rpg.getUserid());
-        unregisterPlayer(Bukkit.getServer().getPlayer(p.getName()));
-        registerPlayer(Bukkit.getServer().getPlayer(p.getName()));
-        Util.teleportToSpawn(p, race);
-    }
-}
