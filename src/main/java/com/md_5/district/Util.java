@@ -122,7 +122,7 @@ public class Util {
 
     public static int getTotalVolume(String player) {
         int num = 0;
-        for (Region r : Regions.getRegions()) {
+        for (Region r : Loader.byPlayer(player)) {
             if (r.getOwner().equals(player)) {
                 num += r.getVolume();
             }

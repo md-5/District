@@ -1,6 +1,7 @@
 package com.md_5.district;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -12,7 +13,11 @@ public class Loader {
 
     public static Region load(String name) {
         // World
-        String w = plugin.db.Read("SELECT world FROM " + Config.prefix + "regions WHERE name='" + name + "'").get(1).get(0);
+        HashMap<Integer, ArrayList<String>> result = plugin.db.Read("SELECT world FROM " + Config.prefix + "regions WHERE name='" + name + "'");
+        if (result.get(1) == null){
+            return null;
+        }
+        String w = result.get(1).get(0);
         World world = Bukkit.getServer().getWorld(w);
         // Location point 1
         int start_x = Integer.parseInt(plugin.db.Read("SELECT start_x FROM " + Config.prefix + "regions WHERE name='" + name + "'").get(1).get(0));
@@ -29,7 +34,7 @@ public class Loader {
         // Owner
         String owner = plugin.db.Read("SELECT owner FROM " + Config.prefix + "regions WHERE name='" + name + "'").get(1).get(0);
         ArrayList<String> friends = new ArrayList<String>();
-        for (ArrayList<String> f : plugin.db.Read("SELECT playerName FROM " + Config.prefix + "friends WHERE regionName='" + name + "'").values()){
+        for (ArrayList<String> f : plugin.db.Read("SELECT playerName FROM " + Config.prefix + "friends WHERE regionName='" + name + "'").values()) {
             friends.add(f.get(0));
         }
         // Construct the region
@@ -43,7 +48,7 @@ public class Loader {
                 + r.getWorld().getName() + "', '"
                 + r.start_x + "', '" + r.start_y + "', '" + r.start_z + "', '" + r.end_x + "', '" + r.end_y + "', '" + r.end_z + "', '" + r.getOwner() + "');";
         plugin.db.write(sql);
-        for (String f : r.getMembers()){
+        for (String f : r.getMembers()) {
             plugin.db.write("INSERT INTO " + Config.prefix + "friends VALUES ('" + r.getName() + "', '" + f + "');");
         }
     }
@@ -52,5 +57,21 @@ public class Loader {
         String name = r.getName();
         plugin.db.write("DELETE FROM " + Config.prefix + "regions WHERE name='" + name + "';");
         plugin.db.write("DELETE FROM " + Config.prefix + "friends WHERE regionName='" + name + "';");
+    }
+
+    public static ArrayList<Region> byPlayer(String p) {
+        ArrayList<Region> r = new ArrayList<Region>();
+        for (ArrayList<String> f : plugin.db.Read("SELECT name FROM " + Config.prefix + "regions WHERE owner='" + p + "'").values()) {
+            r.add(load(f.get(0)));
+        }
+        return r;
+    }
+
+    public static ArrayList<Region> loadAll() {
+        ArrayList<Region> r = new ArrayList<Region>();
+        for (ArrayList<String> f : plugin.db.Read("SELECT name FROM " + Config.prefix + "regions").values()) {
+            r.add(load(f.get(0)));
+        }
+        return r;
     }
 }

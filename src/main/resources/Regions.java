@@ -3,7 +3,7 @@ package com.md_5.district;
 import java.util.Collection;
 import java.util.HashMap;
 
-public class Regions {
+public class Regionas {
 
     private static HashMap<String, Region> regions = new HashMap<String, Region>();
 
