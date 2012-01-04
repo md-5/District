@@ -2,54 +2,47 @@ package com.md_5.district;
 
 import java.util.ArrayList;
 
+import java.util.HashMap;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 public class Util {
 
-    public static boolean isInCuboid(Location loc, Location l1, Location l2) {
-        double x1 = l1.getX(), x2 = l2.getX(),
-                y1 = l1.getY(), y2 = l2.getY(),
-                z1 = l1.getZ(), z2 = l2.getZ(),
-                pointx = loc.getX(),
-                pointy = loc.getY(),
-                pointz = loc.getZ();
-
-        Location max = new Location(l1.getWorld(), Math.max(x1, x2), Math.max(y1, y2), Math.max(z1, z2));
-        Location min = new Location(l1.getWorld(), Math.min(x1, x2), Math.min(y1, y2), Math.min(z1, z2));
-
-        return (pointx >= min.getX() && pointx <= max.getX() + 1
-                && pointy >= min.getY() && pointy <= max.getY() && pointz >= min.getZ() && pointz <= max.getZ() + 1);
+    public static ArrayList<Region> getCuboids(World w, int point_x, int point_y, int point_z) {
+        String sql = ("SELECT name FROM " + Config.prefix + "regions"
+                + " WHERE `start_x` <= " + point_x + " AND `end_x` >= " + point_x
+                + " AND `start_y` <= " + point_y + " AND `end_y` >= " + point_y
+                + " AND `start_z` <= " + point_z + " AND `end_z` >= " + point_z
+                + " AND `world` = " + w.getName() + ";");
+        Bukkit.getServer().getLogger().info(sql);
+        HashMap<Integer, ArrayList<String>> result = District.instance.db.Read(sql);
+        ArrayList<String> regionNames = new ArrayList<String>();
+        for (ArrayList<String> s : result.values()) {
+            regionNames.add(s.get(0));
+        }
+        ArrayList<Region> regions = new ArrayList<Region>();
+        for (String s : regionNames) {
+            regions.add(Loader.load(s));
+        }
+        return regions;
     }
 
     public static ArrayList<Region> getRegions(Location location) {
-        // Select the exact region(s) they are in
-        ArrayList<Region> currentRegionSet = new ArrayList<Region>();
-        for (Region reg : Regions.getRegions()) {
-            if (Util.isInCuboid(location, reg.getL1(), reg.getL2())) {
-                currentRegionSet.add(reg);
-            }
-        }
-        // Save resources
-        if (currentRegionSet.isEmpty()) {
-            return null;
-        }
-        return currentRegionSet;
+        return getCuboids(location.getWorld(), location.getBlockX(), location.getBlockY(), location.getBlockZ());
     }
 
     public static void outline(Player p, Region r) {
-        Location min = r.getMin();
-        Location max = r.getMax();
-        World w = min.getWorld();
+        World w = r.getWorld();
         int block = Config.outline;
 
-        int minX = min.getBlockX();
-        int minY = min.getBlockY();
-        int minZ = min.getBlockZ();
-        int maxX = max.getBlockX();
-        int maxY = max.getBlockY();
-        int maxZ = max.getBlockZ();
+        int minX = r.start_x;
+        int minY = r.start_y;
+        int minZ = r.start_z;
+        int maxX = r.end_x;
+        int maxY = r.end_y;
+        int maxZ = r.end_z;
 
         for (int x = minX; x <= maxX; ++x) {
             for (int y = minY; y <= maxY; ++y) {
@@ -73,16 +66,14 @@ public class Util {
     }
 
     public static void removeOutline(Player p, Region r) {
-        Location min = r.getMin();
-        Location max = r.getMax();
-        World w = min.getWorld();
+        World w = r.getWorld();
 
-        int minX = min.getBlockX();
-        int minY = min.getBlockY();
-        int minZ = min.getBlockZ();
-        int maxX = max.getBlockX();
-        int maxY = max.getBlockY();
-        int maxZ = max.getBlockZ();
+        int minX = r.start_x;
+        int minY = r.start_y;
+        int minZ = r.start_z;
+        int maxX = r.end_x;
+        int maxY = r.end_y;
+        int maxZ = r.end_z;
 
         int block;
 
@@ -200,7 +191,7 @@ public class Util {
         Location max = getMax(l1, l2);
         ArrayList<Region> currentRegionSet = Util.getRegions(min);
         ArrayList<Region> currentRegionSet2 = Util.getRegions(max);
-        if (currentRegionSet != null || currentRegionSet2 != null) {
+        if (!currentRegionSet.isEmpty() || !currentRegionSet2.isEmpty()) {
             return true;
         }
         return false;

@@ -24,10 +24,6 @@ public class DistrictBlockListener extends BlockListener {
         Location eventLocation = event.getBlock().getLocation();       
         // Regions the block is in
         ArrayList<Region> currentRegionSet = Util.getRegions(eventLocation);
-        // Save resources
-        if (currentRegionSet == null) {
-            return;
-        }
         // Check if they are denied from placing in ANY region he block is in
         for (Region r : currentRegionSet) {
             if (!r.canUse(eventPlayer)) {
@@ -45,10 +41,6 @@ public class DistrictBlockListener extends BlockListener {
         Location eventLocation = event.getBlock().getLocation();       
         // Regions the block is in
         ArrayList<Region> currentRegionSet = Util.getRegions(eventLocation);
-        // Save resources
-        if (currentRegionSet == null) {
-            return;
-        }
         // Check if they are denied from placing in ANY region he block is in
         for (Region r : currentRegionSet) {
             if (!r.canUse(eventPlayer)) {

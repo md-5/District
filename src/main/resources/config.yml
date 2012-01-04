@@ -13,9 +13,9 @@ outline: 20
 
 # MySQL info
 mysql:
-    host: localhost
+    host: 192.168.0.25
     port: 3306
     database: minecraft
-    user: root
-    password: password
+    user: minecraft
+    password: minecraft
     prefix: ds_

@@ -59,7 +59,6 @@ public class Commands {
         }
 
         Region creation = new Region(point1.getWorld(), point1, point2, player.getName(), new ArrayList<String>(), args[2]);
-        Regions.addRegion(creation);
         Loader.save(creation);
         player.sendMessage(ChatColor.GREEN + "District: A " + args[1] + "x" + args[1] + "x"
                 + args[1] + " (" + creation.getVolume() + " blocks) region named " + creation.getName() + " has been claimed for you!");

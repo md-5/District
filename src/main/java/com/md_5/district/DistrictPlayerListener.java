@@ -26,11 +26,9 @@ public class DistrictPlayerListener extends PlayerListener {
         // Event details
         Player eventPlayer = event.getPlayer();
         Block block = event.getClickedBlock();
-
         if (block == null) {
             return;
         }
-
         // Don't do anything for pressure plates
         Material type = block.getType();
         if (type == Material.WOOD_PLATE || type == Material.STONE_PLATE) {
@@ -57,7 +55,7 @@ public class DistrictPlayerListener extends PlayerListener {
             }
         }
         if (!regions.equals("")) {
-            eventPlayer.sendMessage(ChatColor.GOLD + "District: Applicable regions: " + regions);
+            eventPlayer.sendMessage(ChatColor.GOLD + "District: Applicable regions: " + regions.substring(0, regions.length() - 2));
         } else if (eventPlayer.hasPermission("district.wand") && eventPlayer.getItemInHand().getTypeId() == Config.wand) {
             eventPlayer.sendMessage(ChatColor.GOLD + "District: There are no applicable regions here");
         }

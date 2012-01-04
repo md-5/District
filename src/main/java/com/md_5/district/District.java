@@ -25,7 +25,6 @@ public class District extends JavaPlugin {
         // Load the files
         Config.load(this);
         db = new Database(this);
-        Loader.load();
         // Find the LWC plugin and get access to it's API
         Plugin lwcPlugin = getServer().getPluginManager().getPlugin("LWC");
         if (lwcPlugin != null) {
@@ -131,12 +130,12 @@ public class District extends JavaPlugin {
             }
             return regions.get(0);
         } else {
-            Region r = Regions.getRegion(args[1]);
+            Region r = Loader.load(args[1]);
             if (r == null) {
                 throw new CommandException("Region does not exist");
             }
+            return r;
         }
-        return Regions.getRegion(args[1]);
     }
 
     public boolean onConsoleCommand(CommandSender sender, Command command, String label, String[] args) {
