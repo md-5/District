@@ -42,7 +42,7 @@ public class Database {
                 + "`owner` TEXT NOT NULL"
                 + ") ENGINE = MYISAM ;");
         write("CREATE TABLE IF NOT EXISTS `" + Config.prefix + "friends` ("
-                + "`regionName` INT NOT NULL ,"
+                + "`regionName` TEXT NOT NULL ,"
                 + "`playerName` TEXT NOT NULL"
                 + ") ENGINE = MYISAM ;");
     }

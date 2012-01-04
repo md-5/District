@@ -28,7 +28,6 @@ public class Region {
         end_x = loc2.getBlockX();
         end_y = loc2.getBlockY();
         end_z = loc2.getBlockZ();
-        System.out.println(start_x + "," + end_x);
         this.owner = owner;
         this.members = members;
         this.name = name;

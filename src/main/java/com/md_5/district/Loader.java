@@ -28,8 +28,12 @@ public class Loader {
         Location l2 = new Location(world, v2.getBlockX(), v2.getBlockY(), v2.getBlockZ());
         // Owner
         String owner = plugin.db.Read("SELECT owner FROM " + Config.prefix + "regions WHERE name='" + name + "'").get(1).get(0);
+        ArrayList<String> friends = new ArrayList<String>();
+        for (ArrayList<String> f : plugin.db.Read("SELECT playerName FROM " + Config.prefix + "friends WHERE regionName='" + name + "'").values()){
+            friends.add(f.get(0));
+        }
         // Construct the region
-        return new Region(world, l1, l2, owner, new ArrayList<String>(), name);
+        return new Region(world, l1, l2, owner, friends, name);
     }
 
     public static void save(Region r) {
@@ -39,10 +43,14 @@ public class Loader {
                 + r.getWorld().getName() + "', '"
                 + r.start_x + "', '" + r.start_y + "', '" + r.start_z + "', '" + r.end_x + "', '" + r.end_y + "', '" + r.end_z + "', '" + r.getOwner() + "');";
         plugin.db.write(sql);
+        for (String f : r.getMembers()){
+            plugin.db.write("INSERT INTO " + Config.prefix + "friends VALUES ('" + r.getName() + "', '" + f + "');");
+        }
     }
 
     public static void remove(Region r) {
         String name = r.getName();
         plugin.db.write("DELETE FROM " + Config.prefix + "regions WHERE name='" + name + "';");
+        plugin.db.write("DELETE FROM " + Config.prefix + "friends WHERE regionName='" + name + "';");
     }
 }
