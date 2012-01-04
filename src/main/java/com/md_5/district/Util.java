@@ -16,7 +16,6 @@ public class Util {
                 + " AND `start_y` <= " + point_y + " AND `end_y` >= " + point_y
                 + " AND `start_z` <= " + point_z + " AND `end_z` >= " + point_z
                 + " AND `world` = " + w.getName() + ";");
-        Bukkit.getServer().getLogger().info(sql);
         HashMap<Integer, ArrayList<String>> result = District.instance.db.Read(sql);
         ArrayList<String> regionNames = new ArrayList<String>();
         for (ArrayList<String> s : result.values()) {
