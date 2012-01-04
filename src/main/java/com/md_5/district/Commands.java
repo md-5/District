@@ -27,18 +27,18 @@ public class Commands {
         if (size % 2 == 0) {
             throw new CommandException("Size must be odd");
         }
-        
+
         World world = player.getWorld();
-        
+
         // Limit height to world height
         height = Math.min(size, world.getMaxHeight());
-        
+
         size /= 2;
         height /= 2;
-        
+
         size = (int) Math.floor(size);
         height = (int) Math.floor(size);
-        
+
         Location point1 = player.getLocation();
         Location point2 = player.getLocation();
         point1.add(size, height, size);
@@ -60,21 +60,21 @@ public class Commands {
 
         Region creation = new Region(point1.getWorld(), point1, point2, player.getName(), new ArrayList<String>(), args[2]);
         Regions.addRegion(creation);
-        Loader.save(district, creation);
+        Loader.save(creation);
         player.sendMessage(ChatColor.GREEN + "District: A " + args[1] + "x" + args[1] + "x"
                 + args[1] + " (" + creation.getVolume() + " blocks) region named " + creation.getName() + " has been claimed for you!");
-        
+
         //Util.timedOutline(player, creation, 80, district);
-        
+
         return;
     }
-    
+
     public static void quota(Player player, String[] args) {
         int used = Util.getTotalVolume(player);
         int total = Util.getMaxVolume(player);
-        String totalStr = total == -1?"infinite":""+total;
-        player.sendMessage(ChatColor.GREEN + "District: You have claimed " + used + 
-                " blocks of your " + totalStr + " block quota.");
+        String totalStr = total == -1 ? "infinite" : "" + total;
+        player.sendMessage(ChatColor.GREEN + "District: You have claimed " + used
+                + " blocks of your " + totalStr + " block quota.");
     }
 
     public static void show(Player player, String[] args, Region r) {
@@ -85,14 +85,14 @@ public class Commands {
         if (r.canUse(player)) {
             Util.outline(player, r);
             Vector size = r.getSize();
-            player.sendMessage(ChatColor.GREEN + "District: Your " + (size.getBlockX() + 1) + 
-                    "x" + (size.getBlockY() + 1) + "x" + (size.getBlockZ() + 1) + " (" +
-                    r.getVolume() + " blocks) region has been outlined just for you");
+            player.sendMessage(ChatColor.GREEN + "District: Your " + (size.getBlockX() + 1)
+                    + "x" + (size.getBlockY() + 1) + "x" + (size.getBlockZ() + 1) + " ("
+                    + r.getVolume() + " blocks) region has been outlined just for you");
         } else {
             r.sendDeny(player);
         }
     }
-    
+
     public static void hide(Player player, String[] args, Region r) {
         if (args.length != 2) {
             invalidArgs(player);
@@ -100,9 +100,9 @@ public class Commands {
         if (r.canUse(player)) {
             Util.removeOutline(player, r);
             Vector size = r.getSize();
-            player.sendMessage(ChatColor.GREEN + "District: Your " + (size.getBlockX() + 1) + 
-                    "x" + (size.getBlockY() + 1) + "x" + (size.getBlockZ() + 1) + 
-                    " region has been hidden");
+            player.sendMessage(ChatColor.GREEN + "District: Your " + (size.getBlockX() + 1)
+                    + "x" + (size.getBlockY() + 1) + "x" + (size.getBlockZ() + 1)
+                    + " region has been hidden");
         } else {
             r.sendDeny(player);
         }
@@ -115,7 +115,7 @@ public class Commands {
         }
         if (r.canAdmin(player)) {
             Regions.removeRegion(args[1]);
-            Loader.remove(district, r);
+            Loader.remove(r);
             player.sendMessage(ChatColor.GREEN + "District: Region " + r.getName() + " removed");
         } else {
             r.sendDeny(player);
@@ -130,7 +130,7 @@ public class Commands {
         if (r.canAdmin(player)) {
             if (!r.isMember(args[2])) {
                 r.addMember(args[2]);
-                Loader.save(district, r);
+                Loader.save(r);
                 player.sendMessage(ChatColor.GREEN + "District: Player " + args[2] + " added to " + r.getName());
             } else {
                 player.sendMessage(ChatColor.RED + "District: Player " + args[2] + " is already a member of " + r.getName());
@@ -149,7 +149,7 @@ public class Commands {
         if (r.canAdmin(player)) {
             if (r.isMember(args[2])) {
                 r.removeMember(args[2]);
-                Loader.save(district, r);
+                Loader.save(r);
                 player.sendMessage(ChatColor.GREEN + "District: Player " + args[2] + " removed from " + r.getName());
             } else {
                 player.sendMessage(ChatColor.RED + "District: Player " + args[2] + " is not a member of " + r.getName());
@@ -167,52 +167,49 @@ public class Commands {
             if (r.isOwner(player)) {
                 owns += r.getName() + ", ";
             }
-            if(r.isMember(player)) {
+            if (r.isMember(player)) {
                 isMemberOf += r.getName() + ", ";
             }
         }
-        
+
         Boolean isSender = player == sender.getName();
-        if(!isMemberOf.equals("")) {
-            sender.sendMessage(ChatColor.GREEN + "District: " + (isSender?"You are":(player + " is")) +
-            		" a member of these regions: " + isMemberOf);
-        }
-        else {
-            sender.sendMessage(ChatColor.GREEN + "District: " + (isSender?"You are":(player + " is")) +
-                    " not a member of any regions");
-        }
-        
-        if (!owns.equals("")) {
-            sender.sendMessage(ChatColor.GREEN + "District: " + (isSender?"You own":(player + " owns")) + 
-                    " these regions: " + owns);
+        if (!isMemberOf.equals("")) {
+            sender.sendMessage(ChatColor.GREEN + "District: " + (isSender ? "You are" : (player + " is"))
+                    + " a member of these regions: " + isMemberOf);
         } else {
-            sender.sendMessage(ChatColor.GREEN + "District: " + (isSender?"You own":(player + " owns")) +
-                    " no regions");
+            sender.sendMessage(ChatColor.GREEN + "District: " + (isSender ? "You are" : (player + " is"))
+                    + " not a member of any regions");
+        }
+
+        if (!owns.equals("")) {
+            sender.sendMessage(ChatColor.GREEN + "District: " + (isSender ? "You own" : (player + " owns"))
+                    + " these regions: " + owns);
+        } else {
+            sender.sendMessage(ChatColor.GREEN + "District: " + (isSender ? "You own" : (player + " owns"))
+                    + " no regions");
         }
     }
 
     public static void listAll(Player sender, String[] args) {
-        if(!sender.hasPermission("district.listall")) {
+        if (!sender.hasPermission("district.listall")) {
             throw new CommandException("You don't have permission to access that command!");
         }
-        
-        if(args.length == 2) {
+
+        if (args.length == 2) {
             String player = args[1];
-            
+
             list(player, sender);
-        }
-        else if(args.length == 1) {
+        } else if (args.length == 1) {
             String result = "";
             for (Region r : Regions.getRegions()) {
                 result += r.getName() + ", ";
             }
             sender.sendMessage(ChatColor.GREEN + "District: The following regions exist: " + result);
-        }
-        else {
+        } else {
             invalidArgs(sender);
         }
     }
-    
+
     public static void listMembers(Player player, String[] args, Region r) {
         if (args.length != 2) {
             invalidArgs(player);
@@ -235,29 +232,29 @@ public class Commands {
     }
 
     public static void invalidArgs(Player p) {
-        throw new CommandException("Invalid number of arguments for that command");   
+        throw new CommandException("Invalid number of arguments for that command");
     }
 
     public static void setOwner(Player player, String[] args,
             District district, Region region) {
-        if(!player.hasPermission("district.setowner")) {
+        if (!player.hasPermission("district.setowner")) {
             throw new CommandException("You don't have permission to access that command!");
         }
-        
-        if(args.length != 3) {
-          invalidArgs(player);
-          return;
+
+        if (args.length != 3) {
+            invalidArgs(player);
+            return;
         }
-        
+
         String newOwnerName = args[2];
         OfflinePlayer newOwner = district.getServer().getOfflinePlayer(newOwnerName);
-        
-        if(!newOwner.hasPlayedBefore()) {
+
+        if (!newOwner.hasPlayedBefore()) {
             throw new CommandException(newOwnerName + " has never been on this server!");
         }
-        
+
         region.setOwner(newOwnerName);
-        player.sendMessage(ChatColor.GREEN + "District: Owner of region " + region.getName() + 
-                " set to " + newOwnerName);
+        player.sendMessage(ChatColor.GREEN + "District: Owner of region " + region.getName()
+                + " set to " + newOwnerName);
     }
 }

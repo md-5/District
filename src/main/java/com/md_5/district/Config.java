@@ -6,6 +6,7 @@ public class Config {
 
     public static int xsmall, small, medium, large, xlarge;
     public static int wand, outline;
+    public static String connectionString, prefix;
 
     public static void load(final District plugin) {
         // General config loading
@@ -21,5 +22,10 @@ public class Config {
         xlarge = config.getInt("xlarge", 21);
         wand = config.getInt("wand", 286);
         outline = config.getInt("outline", 20);
+        // Database
+        connectionString = "jdbc:mysql://" + config.getString("mysql.host") + ":" + config.getInt("mysql.port")
+                + "/" + config.getString("mysql.database") + "?user=" + config.getString("mysql.user")
+                + "&password=" + config.getString("mysql.password");
+        prefix = config.getString("mysql.prefix");
     }
 }

@@ -17,11 +17,15 @@ public class District extends JavaPlugin {
 
     public static final Logger logger = Bukkit.getServer().getLogger();
     public LWC lwc = null;
+    public Database db;
+    public static District instance;
 
     public void onEnable() {
+        instance = this;
         // Load the files
         Config.load(this);
-        Loader.load(this);
+        db = new Database(this);
+        Loader.load();
         // Find the LWC plugin and get access to it's API
         Plugin lwcPlugin = getServer().getPluginManager().getPlugin("LWC");
         if (lwcPlugin != null) {

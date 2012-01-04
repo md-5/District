@@ -1,73 +1,63 @@
 package com.md_5.district;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.util.Vector;
 
 public class Loader {
 
-    public static void load(final District plugin) {
-        // Get the stuff to loop
-        File regionsRoot = new File(plugin.getDataFolder() + File.separator + "Regions");
-        regionsRoot.mkdir();
-        File[] regionFiles = regionsRoot.listFiles();
-        // Loop through all files
-        for (File f : regionFiles) {
-            // Load the file
-            CustomConfig configFile = new CustomConfig( f.getAbsolutePath());
-            FileConfiguration config = configFile.getConfig();
-            // Set and get the variables
-            String name = config.getString("name");
-            String w = config.getString("world");
+    private static final District plugin = District.instance;
+
+    public static void load() {
+        HashMap<Integer, ArrayList<String>> regions = plugin.db.Read("SELECT name FROM " + Config.prefix + "regions");
+        for (ArrayList<String> set : regions.values()) {
+            // Name
+            String name = set.get(0);
+            // World
+            String w = plugin.db.Read("SELECT world FROM " + Config.prefix + "regions WHERE name='" + name + "'").get(1).get(0);
             World world = Bukkit.getServer().getWorld(w);
             // Location point 1
-            Vector v1 = config.getVector("start");
+            int start_x = Integer.parseInt(plugin.db.Read("SELECT start_x FROM " + Config.prefix + "regions WHERE name='" + name + "'").get(1).get(0));
+            int start_y = Integer.parseInt(plugin.db.Read("SELECT start_y FROM " + Config.prefix + "regions WHERE name='" + name + "'").get(1).get(0));
+            int start_z = Integer.parseInt(plugin.db.Read("SELECT start_z FROM " + Config.prefix + "regions WHERE name='" + name + "'").get(1).get(0));
+            Vector v1 = new Vector(start_x, start_y, start_z);
             Location l1 = new Location(world, v1.getBlockX(), v1.getBlockY(), v1.getBlockZ());
             // Location point 2
-            Vector v2 = config.getVector("end");
+            int end_x = Integer.parseInt(plugin.db.Read("SELECT end_x FROM " + Config.prefix + "regions WHERE name='" + name + "'").get(1).get(0));
+            int end_y = Integer.parseInt(plugin.db.Read("SELECT end_y FROM " + Config.prefix + "regions WHERE name='" + name + "'").get(1).get(0));
+            int end_z = Integer.parseInt(plugin.db.Read("SELECT end_z FROM " + Config.prefix + "regions WHERE name='" + name + "'").get(1).get(0));
+            Vector v2 = new Vector(end_x, end_y, end_z);
             Location l2 = new Location(world, v2.getBlockX(), v2.getBlockY(), v2.getBlockZ());
             // Owner
-            String owner = config.getString("owner");
-            // Friends
-            @SuppressWarnings("unchecked")
-            List<String> members = config.getList("friends");
-            if (members == null){
-                System.out.println("null members");
-                members = new ArrayList<String>();
-            }
+            String owner = plugin.db.Read("SELECT owner FROM " + Config.prefix + "regions WHERE name='" + name + "'").get(1).get(0);
             // Construct the region
-            Region r = new Region(world, l1, l2, owner, members, name);
-            // Set extra stuff
-            r.setGreeting(config.getString("greeting", ""));
-            r.setFarewell(config.getString("farewell", ""));
+            Region r = new Region(world, l1, l2, owner, new ArrayList<String>(), name);
+            // And register it
             Regions.addRegion(r);
         }
     }
 
-    public static void save(final District plugin, Region region) {
-        // Initialise the config
-        CustomConfig configFile = new CustomConfig(plugin.getDataFolder()
-                + File.separator + "Regions" + File.separator + region.getName() + ".yml");
-        FileConfiguration config = configFile.getConfig();
-        // Save all the stuff
-        config.set("name", region.getName());
-        config.set("world", region.getWorld().getName());
-        config.set("start", new Vector(region.getL1().getBlockX(), region.getL1().getBlockY(), region.getL1().getBlockZ()));
-        config.set("end", new Vector(region.getL2().getBlockX(), region.getL2().getBlockY(), region.getL2().getBlockZ()));
-        config.set("owner", region.getOwner());
-        config.set("friends", region.getMembers());
-        config.set("greeting", region.getGreeting());
-        config.set("farewell", region.getFarewell());
-        configFile.saveConfig();
+    public static void save(Region r) {
     }
 
-    public static void remove(final District plugin, Region region) {
-        File file = new File(plugin.getDataFolder() + File.separator + "Regions" + File.separator + region.getName() + ".yml");
-        file.delete();
+    public static void remove(Region r) {
+    }
+}
+public ShadowPlayer addMySQLPlayer(String p) {
+        plugin.getDb().write("INSERT INTO " + plugin.getConf().getPrefix()
+                + "users (user) VALUES ('" + p + "')");
+        int id = plugin.getDb().getInt("SELECT id FROM " + plugin.getConf().getPrefix() + "users WHERE user = '" + p + "'");
+        return new ShadowPlayer(p, Races.NULL, "unset", id, plugin);
+    }
+
+    public void changeRace(Player p, Races race) {
+        ShadowPlayer rpg = plugin.getPlayerManager().getPlayer(p.getName());
+        plugin.getDb().write("UPDATE " + plugin.getConf().getPrefix() + "users SET race='" + race.getSingular() + "' WHERE id=" + rpg.getUserid());
+        unregisterPlayer(Bukkit.getServer().getPlayer(p.getName()));
+        registerPlayer(Bukkit.getServer().getPlayer(p.getName()));
+        Util.teleportToSpawn(p, race);
     }
 }
