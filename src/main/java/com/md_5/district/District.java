@@ -25,6 +25,11 @@ public class District extends JavaPlugin {
         // Load the files
         Config.load(this);
         db = new Database(this);
+        if (Config.transfer) {
+            OldLoader.load(this);
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
         // Find the LWC plugin and get access to it's API
         Plugin lwcPlugin = getServer().getPluginManager().getPlugin("LWC");
         if (lwcPlugin != null) {

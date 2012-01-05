@@ -19,3 +19,4 @@ mysql:
     user: minecraft
     password: minecraft
     prefix: ds_
+transfer: false

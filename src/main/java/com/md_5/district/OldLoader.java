@@ -16,6 +16,7 @@ public class OldLoader {
         File regionsRoot = new File(plugin.getDataFolder() + File.separator + "Regions");
         regionsRoot.mkdir();
         File[] regionFiles = regionsRoot.listFiles();
+        ArrayList<Region> regions = new ArrayList<Region>();
         // Loop through all files
         for (File f : regionFiles) {
             // Load the file
@@ -34,8 +35,7 @@ public class OldLoader {
             // Owner
             String owner = config.getString("owner");
             // Friends
-            @SuppressWarnings("unchecked")
-            List<String> members = config.getList("friends");
+            List<String> members = config.getStringList("friends");
             if (members == null) {
                 System.out.println("null members");
                 members = new ArrayList<String>();
@@ -45,29 +45,10 @@ public class OldLoader {
             // Set extra stuff
             r.setGreeting(config.getString("greeting", ""));
             r.setFarewell(config.getString("farewell", ""));
-            Regions.addRegion(r);
+            regions.add(r);
         }
-    }
-
-    public static void save(final District plugin, Region region) {
-        // Initialise the config
-        CustomConfig configFile = new CustomConfig(plugin.getDataFolder()
-                + File.separator + "Regions" + File.separator + region.getName() + ".yml");
-        FileConfiguration config = configFile.getConfig();
-        // Save all the stuff
-        config.set("name", region.getName());
-        config.set("world", region.getWorld().getName());
-        config.set("start", new Vector(region.getL1().getBlockX(), region.getL1().getBlockY(), region.getL1().getBlockZ()));
-        config.set("end", new Vector(region.getL2().getBlockX(), region.getL2().getBlockY(), region.getL2().getBlockZ()));
-        config.set("owner", region.getOwner());
-        config.set("friends", region.getMembers());
-        config.set("greeting", region.getGreeting());
-        config.set("farewell", region.getFarewell());
-        configFile.saveConfig();
-    }
-
-    public static void remove(final District plugin, Region region) {
-        File file = new File(plugin.getDataFolder() + File.separator + "Regions" + File.separator + region.getName() + ".yml");
-        file.delete();
+        for (Region r : regions){
+            Loader.save(r);
+        }
     }
 }
