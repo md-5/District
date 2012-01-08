@@ -162,12 +162,7 @@ public class Commands {
         String owns = "";
         String isMemberOf = "";
         for (Region r : Loader.byPlayer(player)) {
-            /*if (r.isOwner(player)) {
-                owns += r.getName() + ", ";
-            }
-            if (r.isMember(player)) {
-                isMemberOf += r.getName() + ", ";
-            }*/
+            owns += r.getName() + ", ";
         }
 
         Boolean isSender = player == sender.getName();
@@ -199,8 +194,8 @@ public class Commands {
             list(player, sender);
         } else if (args.length == 1) {
             String result = "";
-            for (Region r : Loader.loadAll()) {
-                result += r.getName() + ", ";
+            for (String r : Loader.listAll()) {
+                result += r + ", ";
             }
             sender.sendMessage(ChatColor.GREEN + "District: The following regions exist: " + result);
         } else {

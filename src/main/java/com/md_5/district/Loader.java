@@ -14,7 +14,7 @@ public class Loader {
     public static Region load(String name) {
         // World
         HashMap<Integer, ArrayList<String>> result = plugin.db.Read("SELECT world FROM " + Config.prefix + "regions WHERE name='" + name + "'");
-        if (result.get(1) == null){
+        if (result.get(1) == null) {
             return null;
         }
         String w = result.get(1).get(0);
@@ -71,6 +71,14 @@ public class Loader {
         ArrayList<Region> r = new ArrayList<Region>();
         for (ArrayList<String> f : plugin.db.Read("SELECT name FROM " + Config.prefix + "regions").values()) {
             r.add(load(f.get(0)));
+        }
+        return r;
+    }
+
+    public static ArrayList<String> listAll() {
+        ArrayList<String> r = new ArrayList<String>();
+        for (ArrayList<String> f : plugin.db.Read("SELECT name FROM " + Config.prefix + "regions").values()) {
+            r.add(f.get(0));
         }
         return r;
     }
