@@ -10,8 +10,8 @@ import org.bukkit.util.Vector;
 public class Region {
 
     private String name;
-    private Location l1;
-    private Location l2;
+    public int start_x, start_y, start_z;
+    public int end_x, end_y, end_z;
     private World w;
     private String owner;
     private List<String> members;
@@ -20,8 +20,14 @@ public class Region {
 
     public Region(World w, Location l1, Location l2, String owner, List<String> members, String name) {
         this.w = w;
-        this.l1 = l1;
-        this.l2 = l2;
+        Location loc1 = Util.getMin(l1, l2);
+        Location loc2 = Util.getMax(l1, l2);
+        start_x = loc1.getBlockX();
+        start_y = loc1.getBlockY();
+        start_z = loc1.getBlockZ();
+        end_x = loc2.getBlockX();
+        end_y = loc2.getBlockY();
+        end_z = loc2.getBlockZ();
         this.owner = owner;
         this.members = members;
         this.name = name;
@@ -39,22 +45,6 @@ public class Region {
         this.w = w;
     }
 
-    public Location getL1() {
-        return l1;
-    }
-
-    public void setL1(Location l1) {
-        this.l1 = l1;
-    }
-
-    public Location getL2() {
-        return l2;
-    }
-
-    public void setL2(Location l2) {
-        this.l2 = l2;
-    }
-
     public String getOwner() {
         return owner;
     }
@@ -65,11 +55,11 @@ public class Region {
         }
         return false;
     }
-    
+
     public boolean isOwner(String name) {
         return owner.equals(name);
     }
-    
+
     public boolean isOwner(Player p) {
         return isOwner(p.getName());
     }
@@ -138,26 +128,7 @@ public class Region {
         return farewell;
     }
 
-    public Location getMin() {
-        return new Location(l1.getWorld(), Math.min(l1.getBlockX(), l2.getBlockX()),
-                Math.min(l1.getBlockY(), l2.getBlockY()), Math.min(l1.getBlockZ(), l2.getBlockZ()));
-    }
-
-    public Location getMax() {
-        return new Location(l1.getWorld(), Math.max(l1.getBlockX(), l2.getBlockX()),
-                Math.max(l1.getBlockY(), l2.getBlockY()), Math.max(l1.getBlockZ(), l2.getBlockZ()));
-    }
-
     public Vector getSize() {
-        Location min = getMin();
-        Location max = getMax();
-        double start_x = min.getX();
-        double start_y = min.getY();
-        double start_z = min.getZ();
-        double end_x = max.getX();
-        double end_y = max.getY();
-        double end_z = max.getZ();
-
         return new Vector(end_x - start_x, end_y - start_y, end_z - start_z);
     }
 

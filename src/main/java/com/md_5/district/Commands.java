@@ -49,7 +49,7 @@ public class Commands {
             player.sendMessage(ChatColor.RED + "District: Use /district quota to view your remaining quota");
             return;
         }
-        if (Regions.getRegion(args[2]) != null) {
+        if (Loader.load(args[2]) != null) {
             player.sendMessage(ChatColor.RED + "District: Region " + args[2] + " is already claimed");
             return;
         }
@@ -59,7 +59,6 @@ public class Commands {
         }
 
         Region creation = new Region(point1.getWorld(), point1, point2, player.getName(), new ArrayList<String>(), args[2]);
-        Regions.addRegion(creation);
         Loader.save(creation);
         player.sendMessage(ChatColor.GREEN + "District: A " + args[1] + "x" + args[1] + "x"
                 + args[1] + " (" + creation.getVolume() + " blocks) region named " + creation.getName() + " has been claimed for you!");
@@ -114,7 +113,6 @@ public class Commands {
             return;
         }
         if (r.canAdmin(player)) {
-            Regions.removeRegion(args[1]);
             Loader.remove(r);
             player.sendMessage(ChatColor.GREEN + "District: Region " + r.getName() + " removed");
         } else {
@@ -163,13 +161,8 @@ public class Commands {
     public static void list(String player, CommandSender sender) {
         String owns = "";
         String isMemberOf = "";
-        for (Region r : Regions.getRegions()) {
-            if (r.isOwner(player)) {
-                owns += r.getName() + ", ";
-            }
-            if (r.isMember(player)) {
-                isMemberOf += r.getName() + ", ";
-            }
+        for (Region r : Loader.byPlayer(player)) {
+            owns += r.getName() + ", ";
         }
 
         Boolean isSender = player == sender.getName();
@@ -201,8 +194,8 @@ public class Commands {
             list(player, sender);
         } else if (args.length == 1) {
             String result = "";
-            for (Region r : Regions.getRegions()) {
-                result += r.getName() + ", ";
+            for (String r : Loader.listAll()) {
+                result += r + ", ";
             }
             sender.sendMessage(ChatColor.GREEN + "District: The following regions exist: " + result);
         } else {

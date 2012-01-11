@@ -31,7 +31,7 @@ public class Database {
     //Create the DB structure
     public void createStructure() {
         write("CREATE TABLE IF NOT EXISTS `" + Config.prefix + "regions` ("
-                + "`name` INT NOT NULL ,"
+                + "`name` TEXT NOT NULL ,"
                 + "`world` TEXT NOT NULL ,"
                 + "`start_x` INT NOT NULL ,"
                 + "`start_y` INT NOT NULL ,"
@@ -42,8 +42,8 @@ public class Database {
                 + "`owner` TEXT NOT NULL"
                 + ") ENGINE = MYISAM ;");
         write("CREATE TABLE IF NOT EXISTS `" + Config.prefix + "friends` ("
-                + "`regionName` INT NOT NULL ,"
-                + "`playerName` TEXT NOT NULL ,"
+                + "`regionName` TEXT NOT NULL ,"
+                + "`playerName` TEXT NOT NULL"
                 + ") ENGINE = MYISAM ;");
     }
 
