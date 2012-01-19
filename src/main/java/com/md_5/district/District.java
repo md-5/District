@@ -1,5 +1,7 @@
 package com.md_5.district;
 
+import com.griefcraft.lwc.LWC;
+import com.griefcraft.lwc.LWCPlugin;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 import org.bukkit.Bukkit;
@@ -10,13 +12,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-import com.griefcraft.lwc.LWC;
-import com.griefcraft.lwc.LWCPlugin;
 
 public class District extends JavaPlugin {
 
     public static final Logger logger = Bukkit.getServer().getLogger();
-    public LWC lwc = null;
+    public LWC lwc;
     public Database db;
     public static District instance;
 
@@ -25,13 +25,8 @@ public class District extends JavaPlugin {
         // Load the files
         Config.load(this);
         db = new Database(this);
-        if (Config.transfer) {
-            OldLoader.load(this);
-            getServer().getPluginManager().disablePlugin(this);
-            return;
-        }
         // Find the LWC plugin and get access to it's API
-        Plugin lwcPlugin = getServer().getPluginManager().getPlugin("LWC");
+        final Plugin lwcPlugin = getServer().getPluginManager().getPlugin("LWC");
         if (lwcPlugin != null) {
             lwc = ((LWCPlugin) lwcPlugin).getLWC();
         }

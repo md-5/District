@@ -51,8 +51,7 @@ public class Database {
     public boolean write(String sql) {
         try {
             Connection conn = DriverManager.getConnection(connectionString);
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.executeUpdate();
+            conn.createStatement().execute(sql);
             conn.close();
             return true;
         } catch (SQLException ex) {
