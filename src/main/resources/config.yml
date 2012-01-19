@@ -10,6 +10,7 @@ wand: 286
 
 # Outline block
 outline: 20
+cache: 200
 
 # MySQL info
 mysql:

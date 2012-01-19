@@ -15,7 +15,7 @@ public class Util {
                 + " AND `start_y` <= " + point_y + " AND `end_y` >= " + point_y
                 + " AND `start_z` <= " + point_z + " AND `end_z` >= " + point_z
                 + " AND `world` = '" + w.getName() + "';");
-        HashMap<Integer, ArrayList<String>> result = District.instance.db.Read(sql);
+        HashMap<Integer, ArrayList<String>> result = Database.Read(sql);
         ArrayList<String> regionNames = new ArrayList<String>();
         for (ArrayList<String> s : result.values()) {
             regionNames.add(s.get(0));
@@ -122,7 +122,7 @@ public class Util {
 
     public static int getTotalVolume(String player) {
         int num = 0;
-        for (Region r : Loader.byPlayer(player)) {
+        for (Region r : Loader.byOwner(player)) {
             if (r.getOwner().equals(player)) {
                 num += r.getVolume();
             }

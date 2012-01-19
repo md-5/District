@@ -113,7 +113,7 @@ public class Commands {
             return;
         }
         if (r.canAdmin(player)) {
-            Loader.remove(r);
+            Loader.remove(r.getName());
             player.sendMessage(ChatColor.GREEN + "District: Region " + r.getName() + " removed");
         } else {
             r.sendDeny(player);
@@ -161,11 +161,11 @@ public class Commands {
     public static void list(String player, CommandSender sender) {
         String owns = "";
         String isMemberOf = "";
-        for (Region r : Loader.byPlayer(player)) {
+        for (Region r : Loader.byOwner(player)) {
             owns += r.getName() + ", ";
         }
 
-        Boolean isSender = player == sender.getName();
+        Boolean isSender = player.equals(sender.getName());
         if (!isMemberOf.equals("")) {
             sender.sendMessage(ChatColor.GREEN + "District: " + (isSender ? "You are" : (player + " is"))
                     + " a member of these regions: " + isMemberOf);
@@ -213,7 +213,7 @@ public class Commands {
             for (String member : r.getMembers()) {
                 peeps += member + ", ";
             }
-            if (peeps != "") {
+            if (!peeps.isEmpty()) {
                 player.sendMessage(ChatColor.GREEN + "District: " + r.getName() + " has these members: " + peeps);
             } else {
                 player.sendMessage(ChatColor.GREEN + "District: " + r.getName() + " has no members");

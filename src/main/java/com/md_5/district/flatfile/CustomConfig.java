@@ -1,4 +1,4 @@
-package com.md_5.district;
+package com.md_5.district.flatfile;
 
 import java.io.File;
 import java.io.IOException;
