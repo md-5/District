@@ -12,11 +12,11 @@ public class Loader {
     private static HashMap<String, Region> cache = new HashMap<String, Region>();
 
     public static Region load(final String name) {
-        if (cache.containsKey(name)) {
-            return loadFromCache(name);
-        } else {
-            return loadFromDisk(name);
-        }
+        //if (cache.containsKey(name)) {
+        //  return loadFromCache(name);
+        //} else {
+        return loadFromDisk(name);
+        //}
     }
 
     private static Region loadFromDisk(final String name) {

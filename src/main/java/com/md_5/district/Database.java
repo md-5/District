@@ -1,10 +1,6 @@
 package com.md_5.district;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -16,8 +12,7 @@ public final class Database {
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
         }
-        write(
-                "CREATE TABLE IF NOT EXISTS `" + Config.prefix + "regions` ("
+        write("CREATE TABLE IF NOT EXISTS `" + Config.prefix + "regions` ("
                 + "`name` TEXT NOT NULL ,"
                 + "`world` TEXT NOT NULL ,"
                 + "`start_x` INT NOT NULL ,"
@@ -28,8 +23,7 @@ public final class Database {
                 + "`end_z` INT NOT NULL ,"
                 + "`owner` TEXT NOT NULL"
                 + ") ENGINE = MYISAM ;");
-        write(
-                "CREATE TABLE IF NOT EXISTS `" + Config.prefix + "friends` ("
+        write("CREATE TABLE IF NOT EXISTS `" + Config.prefix + "friends` ("
                 + "`regionName` TEXT NOT NULL ,"
                 + "`playerName` TEXT NOT NULL"
                 + ") ENGINE = MYISAM ;");
@@ -49,8 +43,9 @@ public final class Database {
 
     /**
      * Query the database for an int, only returns first row / first field
-     * @param sql
-     * @return first int mathing the specifie sql query
+     *
+     * @param sql the sql to execute
+     * @return first int matching the specified sql query
      */
     public static Integer getInt(final String sql) {
         ResultSet rs = null;
