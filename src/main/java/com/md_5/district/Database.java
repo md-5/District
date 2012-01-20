@@ -1,35 +1,17 @@
 package com.md_5.district;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Database {
+public final class Database {
 
-    private District plugin;
-    private String connectionString;
-
-    public Database(final District plugin) {
-        this.plugin = plugin;
-        this.connectionString = Config.connectionString;
-        // Load the driver instance
+    public static void init() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            DriverManager.getConnection(connectionString);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
         }
-        createStructure();
-    }
-
-    //Create the DB structure
-    public void createStructure() {
         write("CREATE TABLE IF NOT EXISTS `" + Config.prefix + "regions` ("
                 + "`name` TEXT NOT NULL ,"
                 + "`world` TEXT NOT NULL ,"
@@ -47,12 +29,10 @@ public class Database {
                 + ") ENGINE = MYISAM ;");
     }
 
-    // write query
-    public boolean write(String sql) {
+    public static boolean write(final String sql) {
         try {
-            Connection conn = DriverManager.getConnection(connectionString);
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.executeUpdate();
+            Connection conn = DriverManager.getConnection(Config.connectionString);
+            conn.createStatement().execute(sql);
             conn.close();
             return true;
         } catch (SQLException ex) {
@@ -61,13 +41,17 @@ public class Database {
         }
     }
 
-    // Get Int
-    // only return first row / first field
-    public Integer getInt(String sql) {
+    /**
+     * Query the database for an int, only returns first row / first field
+     *
+     * @param sql the sql to execute
+     * @return first int matching the specified sql query
+     */
+    public static Integer getInt(final String sql) {
         ResultSet rs = null;
         Integer result = 0;
         try {
-            Connection conn = DriverManager.getConnection(connectionString);
+            Connection conn = DriverManager.getConnection(Config.connectionString);
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt = conn.prepareStatement(sql);
             if (stmt.executeQuery() != null) {
@@ -89,12 +73,11 @@ public class Database {
         return result;
     }
 
-    // read query
-    public HashMap<Integer, ArrayList<String>> Read(String sql) {
+    public static HashMap<Integer, ArrayList<String>> Read(final String sql) {
         ResultSet rs = null;
-        HashMap<Integer, ArrayList<String>> Rows = new HashMap<Integer, ArrayList<String>>();
+        HashMap<Integer, ArrayList<String>> rows = new HashMap<Integer, ArrayList<String>>();
         try {
-            Connection conn = DriverManager.getConnection(connectionString);
+            Connection conn = DriverManager.getConnection(Config.connectionString);
             PreparedStatement stmt = conn.prepareStatement(sql);
             if (stmt.executeQuery() != null) {
                 stmt.executeQuery();
@@ -104,13 +87,13 @@ public class Database {
                     for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
                         Col.add(rs.getString(i));
                     }
-                    Rows.put(rs.getRow(), Col);
+                    rows.put(rs.getRow(), Col);
                 }
             }
             conn.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        return Rows;
+        return rows;
     }
 }

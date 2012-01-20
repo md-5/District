@@ -1,5 +1,5 @@
 name: District
-version: 1.1.1
+version: 1.2
 description: Simple self-managed land claiming plugin for Shadowraze
 author: md_5
 authors: [Na7coldwater]
@@ -13,7 +13,7 @@ commands:
     description: Access to the main District command
     aliases: ds
     permission: district.command
-    
+
 permissions:
     district.command:
         description: The ability to interact with District

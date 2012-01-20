@@ -1,5 +1,6 @@
 package com.md_5.district;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -14,11 +15,9 @@ public class Region {
     public int end_x, end_y, end_z;
     private World w;
     private String owner;
-    private List<String> members;
-    private String greeting;
-    private String farewell;
+    private ArrayList<String> members;
 
-    public Region(World w, Location l1, Location l2, String owner, List<String> members, String name) {
+    public Region(final World w, final Location l1, final Location l2, final String owner, final ArrayList<String> members, final String name) {
         this.w = w;
         Location loc1 = Util.getMin(l1, l2);
         Location loc2 = Util.getMax(l1, l2);
@@ -84,23 +83,6 @@ public class Region {
         this.members.remove(name);
     }
 
-    public void setGreeting(String greeting) {
-        this.greeting = greeting;
-    }
-
-    public void setFarewell(String farewell) {
-        this.farewell = farewell;
-    }
-
-    // Mesage sending
-    public void sendGreeting(Player p) {
-        return;
-    }
-
-    public void sendFarewell(Player p) {
-        return;
-    }
-
     public void sendDeny(Player p) {
         p.sendMessage(ChatColor.RED + "District: You cannot do that in this region!");
         return;
@@ -118,14 +100,6 @@ public class Region {
         } else {
             return false;
         }
-    }
-
-    public String getGreeting() {
-        return greeting;
-    }
-
-    public String getFarewell() {
-        return farewell;
     }
 
     public Vector getSize() {

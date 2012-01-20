@@ -1,8 +1,10 @@
-package com.md_5.district;
+package com.md_5.district.flatfile;
 
+import com.md_5.district.District;
+import com.md_5.district.Loader;
+import com.md_5.district.Region;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -35,19 +37,16 @@ public class OldLoader {
             // Owner
             String owner = config.getString("owner");
             // Friends
-            List<String> members = config.getStringList("friends");
+            ArrayList<String> members = (ArrayList<String>) config.getStringList("friends");
             if (members == null) {
-                System.out.println("null members");
                 members = new ArrayList<String>();
             }
             // Construct the region
             Region r = new Region(world, l1, l2, owner, members, name);
             // Set extra stuff
-            r.setGreeting(config.getString("greeting", ""));
-            r.setFarewell(config.getString("farewell", ""));
             regions.add(r);
         }
-        for (Region r : regions){
+        for (Region r : regions) {
             Loader.save(r);
         }
     }
