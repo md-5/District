@@ -70,20 +70,32 @@ public class Loader {
     public static void save(final Region r) {
         final String name = r.getName();
         remove(name);
-        String sql = "INSERT INTO " + Config.prefix + "regions VALUES ('"
-                + name + "', '"
-                + r.getWorld().getName() + "', '"
-                + r.start_x + "', '" + r.start_y + "', '" + r.start_z + "', '" + r.end_x + "', '" + r.end_y + "', '" + r.end_z + "', '" + r.getOwner() + "');";
-        Database.write(sql);
+        String sql = "INSERT INTO " + Config.prefix + "regions (`name`, `world`, `start_x`, `start_y`, `start_z`, `end_x`, `end_y`, `end_z`, `owner`) VALUES(?,?,?,?,?,?,?,?,?);";
+        ArrayList<String> args = new ArrayList<String>();
+        args.add(name);
+        args.add(r.getWorld().getName());
+        args.add(String.valueOf(r.start_x));
+        args.add(String.valueOf(r.start_y));
+        args.add(String.valueOf(r.start_z));
+        args.add(String.valueOf(r.end_x));
+        args.add(String.valueOf(r.end_y));
+        args.add(String.valueOf(r.end_z));
+        args.add(r.getOwner());
+        Database.write(sql, args);
         for (String f : r.getMembers()) {
-            Database.write("INSERT INTO " + Config.prefix + "friends VALUES ('" + name + "', '" + f + "');");
+            final ArrayList<String> friends = new ArrayList<String>();
+            friends.add(name);
+            friends.add(f);
+            Database.write("INSERT INTO " + Config.prefix + "friends VALUES(?,?);", friends);
         }
         putCache(r);
     }
 
     public static void remove(final String regionName) {
-        Database.write("DELETE FROM " + Config.prefix + "regions WHERE name='" + regionName + "';");
-        Database.write("DELETE FROM " + Config.prefix + "friends WHERE regionName='" + regionName + "';");
+        ArrayList<String> args = new ArrayList<String>();
+        args.add(regionName);
+        Database.write("DELETE FROM " + Config.prefix + "regions WHERE name = ?;", args);
+        Database.write("DELETE FROM " + Config.prefix + "friends WHERE regionName = ?;", args);
         delCache(regionName);
     }
 

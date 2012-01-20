@@ -9,6 +9,7 @@ import org.bukkit.Location;
 
 public final class RegionSearcher {
 
+    static ExecutorService pool = Executors.newFixedThreadPool(1);
     Location location;
     public Future<Region> future;
 
@@ -19,12 +20,12 @@ public final class RegionSearcher {
 
     public void search() {
         try {
-            ExecutorService pool = Executors.newFixedThreadPool(1);
+
             future = pool.submit(new Callable<Region>() {
 
                 public Region call() {
-                    final ArrayList<Region> regions= Util.getRegions(location);
-                    if (regions == null || regions.isEmpty()){
+                    final ArrayList<Region> regions = Util.getRegions(location);
+                    if (regions == null || regions.isEmpty()) {
                         return null;
                     }
                     return Util.getRegions(location).get(0);

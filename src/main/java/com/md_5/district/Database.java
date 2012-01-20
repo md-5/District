@@ -12,7 +12,7 @@ public final class Database {
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
         }
-        write("CREATE TABLE IF NOT EXISTS `" + Config.prefix + "regions` ("
+        writeRaw("CREATE TABLE IF NOT EXISTS `" + Config.prefix + "regions` ("
                 + "`name` TEXT NOT NULL ,"
                 + "`world` TEXT NOT NULL ,"
                 + "`start_x` INT NOT NULL ,"
@@ -23,16 +23,38 @@ public final class Database {
                 + "`end_z` INT NOT NULL ,"
                 + "`owner` TEXT NOT NULL"
                 + ") ENGINE = MYISAM ;");
-        write("CREATE TABLE IF NOT EXISTS `" + Config.prefix + "friends` ("
+        writeRaw("CREATE TABLE IF NOT EXISTS `" + Config.prefix + "friends` ("
                 + "`regionName` TEXT NOT NULL ,"
                 + "`playerName` TEXT NOT NULL"
                 + ") ENGINE = MYISAM ;");
     }
 
-    public static boolean write(final String sql) {
+    private static boolean writeRaw(final String sql) {
         try {
             Connection conn = DriverManager.getConnection(Config.connectionString);
-            conn.createStatement().execute(sql);
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.execute(sql);
+            conn.close();
+            return true;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+
+    }
+
+    public static boolean write(final String sql, final ArrayList<String> args) {
+        try {
+            Connection conn = DriverManager.getConnection(Config.connectionString);
+            PreparedStatement ps = conn.prepareStatement(sql);
+            for (int i = 0; i < args.size(); i++) {
+                try {
+                    ps.setInt(i + 1, Integer.parseInt(args.get(i)));
+                } catch (final NumberFormatException ex) {
+                    ps.setString(i + 1, args.get(i));
+                }
+            }
+            ps.executeUpdate();
             conn.close();
             return true;
         } catch (SQLException ex) {
