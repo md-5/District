@@ -13,10 +13,11 @@ public class Loader {
 
     public static Region load(final String name) {
         //if (cache.containsKey(name)) {
-        //  return loadFromCache(name);
+        // System.out.println("cache");
+        return loadFromCache(name);
         //} else {
-        return loadFromDisk(name);
-        //}
+        // return loadFromDisk(name);
+        // }
     }
 
     private static Region loadFromDisk(final String name) {
@@ -62,6 +63,10 @@ public class Loader {
         cache.put(region.getName(), region);
     }
 
+    private static void delCache(final String region) {
+        cache.remove(region);
+    }
+
     public static void save(final Region r) {
         final String name = r.getName();
         remove(name);
@@ -79,11 +84,12 @@ public class Loader {
     public static void remove(final String regionName) {
         Database.write("DELETE FROM " + Config.prefix + "regions WHERE name='" + regionName + "';");
         Database.write("DELETE FROM " + Config.prefix + "friends WHERE regionName='" + regionName + "';");
+        delCache(regionName);
     }
 
     public static ArrayList<Region> byOwner(final String playerName) {
         ArrayList<Region> regions = new ArrayList<Region>();
-        for (ArrayList<String> name : Database.Read("SELECT name FROM " + Config.prefix + "regions WHERE owner='" + playerName + "'").values()) {
+        for (final ArrayList<String> name : Database.Read("SELECT name FROM " + Config.prefix + "regions WHERE owner='" + playerName + "'").values()) {
             regions.add(load(name.get(0)));
         }
         return regions;
@@ -91,9 +97,15 @@ public class Loader {
 
     public static ArrayList<String> listAll() {
         ArrayList<String> names = new ArrayList<String>();
-        for (ArrayList<String> name : Database.Read("SELECT name FROM " + Config.prefix + "regions").values()) {
+        for (final ArrayList<String> name : Database.Read("SELECT name FROM " + Config.prefix + "regions").values()) {
             names.add(name.get(0));
         }
         return names;
+    }
+
+    public static void initCache() {
+        for (final String name : listAll()) {
+            putCache(loadFromDisk(name));
+        }
     }
 }

@@ -8,11 +8,11 @@ public class Config {
     public static int wand, outline, cache;
     public static String connectionString, prefix;
 
-    public static void load(final District plugin) {
+    public static void load() {
         // General config loading
-        final FileConfiguration config = plugin.getConfig();
+        final FileConfiguration config = District.instance.getConfig();
         config.options().copyDefaults(true);
-        plugin.saveConfig();
+        District.instance.saveConfig();
         // Populate the variables
         xsmall = config.getInt("xsmall", 5);
         small = config.getInt("small", 7);

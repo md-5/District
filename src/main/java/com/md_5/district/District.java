@@ -17,10 +17,11 @@ public class District extends JavaPlugin {
 
     public void onEnable() {
         instance = this;
-        Config.load(this);
+        Config.load();
         Database.init();
+        Loader.initCache();
+        new DistrictListener();
         lwc = ((LWCPlugin) getServer().getPluginManager().getPlugin("LWC")).getLWC();
-        new DistrictListener(this);
         System.out.println(String.format("District v%1$s by md_5 enabled", this.getDescription().getVersion()));
     }
 
