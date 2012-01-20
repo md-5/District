@@ -1,7 +1,5 @@
 package com.md_5.district;
 
-import java.util.ArrayList;
-import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -19,20 +17,10 @@ public class Executor {
         }
     }
 
-    static void handle(final Cancellable event, final Block block, final Player player) {
-        final Location location = block.getLocation();
-        if (Executor.checkLWC(block)) {
-            return;
-        }
-        // Regions the block is in
-        ArrayList<Region> currentRegionSet = Util.getRegions(location);
-        // Check if they are denied from placing in ANY region he block is in
-        for (Region r : currentRegionSet) {
-            if (!r.canUse(player)) {
-                r.sendDeny(player);
-                event.setCancelled(true);
-                return;
-            }
+    static void handle(final Cancellable event, final Region region, final Player player) {
+        if (!region.canUse(player)) {
+            region.sendDeny(player);
+            event.setCancelled(true);
         }
     }
 }

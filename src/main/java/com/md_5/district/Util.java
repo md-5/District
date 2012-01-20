@@ -1,7 +1,6 @@
 package com.md_5.district;
 
 import java.util.ArrayList;
-
 import java.util.HashMap;
 import org.bukkit.Location;
 import org.bukkit.World;
