@@ -79,9 +79,8 @@ public final class Database {
         try {
             Connection conn = DriverManager.getConnection(Config.connectionString);
             PreparedStatement stmt = conn.prepareStatement(sql);
-            if (stmt.executeQuery() != null) {
-                stmt.executeQuery();
-                rs = stmt.getResultSet();
+            rs = stmt.executeQuery();
+            if (rs != null) {
                 while (rs.next()) {
                     ArrayList<String> Col = new ArrayList<String>();
                     for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
