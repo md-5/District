@@ -1,9 +1,7 @@
 package com.md_5.district;
 
 import static com.md_5.district.Executor.handle;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.Future;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -26,7 +24,7 @@ public class DistrictListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void blockPlaceInit(final BlockPlaceEvent event) {
-        if (!event.isCancelled()) {
+        if (!event.isCancelled() && !event.getPlayer().hasPermission("district.ignore")) {
             final Location location = event.getBlock().getLocation();
             futures.put(location, new RegionSearcher(location));
         }
@@ -34,7 +32,7 @@ public class DistrictListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void blockBreakInit(final BlockBreakEvent event) {
-        if (!event.isCancelled()) {
+        if (!event.isCancelled() && !event.getPlayer().hasPermission("district.ignore")) {
             final Location location = event.getBlock().getLocation();
             futures.put(location, new RegionSearcher(location));
         }
@@ -42,7 +40,7 @@ public class DistrictListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void blockPlacePost(final BlockPlaceEvent event) throws Exception {
-        if (!event.isCancelled()) {
+        if (!event.isCancelled() && !event.getPlayer().hasPermission("district.ignore")) {
             final Region r = futures.get(event.getBlock().getLocation()).future.get();
             if (r == null) {
                 return;
@@ -53,7 +51,7 @@ public class DistrictListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void blockBreakPost(final BlockBreakEvent event) throws Exception {
-        if (!event.isCancelled()) {
+        if (!event.isCancelled() && !event.getPlayer().hasPermission("district.ignore")) {
             final Region r = futures.get(event.getBlock().getLocation()).future.get();
             if (r == null) {
                 return;
@@ -65,20 +63,15 @@ public class DistrictListener implements Listener {
     @EventHandler
     public void playerWand(final PlayerInteractEvent event) {
         final Player player = event.getPlayer();
-        if (player.getItemInHand().getTypeId() == Config.wand && event.getAction() == Action.LEFT_CLICK_BLOCK && player.hasPermission("district.wand")) {
-            final StringBuilder regions = new StringBuilder();
+        if (player.getItemInHand().getTypeId() == Config.wand && event.getAction() == Action.RIGHT_CLICK_BLOCK && player.hasPermission("district.wand")) {
             final Location location = event.getClickedBlock().getLocation();
-            final ArrayList<Region> currentRegionSet = Util.getRegions(location);
-            if (currentRegionSet != null) {
-                for (final Region r : currentRegionSet) {
-                    regions.append(r.getName());
-                    regions.append(" (");
-                    regions.append(r.getOwner());
-                    regions.append("), ");
-                }
+            final Region r = Util.getRegion(location);
+            String regions = new String();
+            if (r != null) {
+                regions = r.getName() + " (" + r.getOwner() + ")";
             }
-            if (!regions.toString().isEmpty()) {
-                player.sendMessage(ChatColor.GOLD + "District: Applicable regions: " + regions.substring(0, regions.length() - 2));
+            if (!regions.isEmpty()) {
+                player.sendMessage(ChatColor.GOLD + "District: Applicable regions: " + regions);
             } else {
                 player.sendMessage(ChatColor.GOLD + "District: There are no applicable regions here");
             }

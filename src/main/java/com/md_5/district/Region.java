@@ -1,7 +1,6 @@
 package com.md_5.district;
 
 import java.util.ArrayList;
-import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -67,7 +66,7 @@ public class Region {
         this.owner = owner;
     }
 
-    public List<String> getMembers() {
+    public ArrayList<String> getMembers() {
         return members;
     }
 
@@ -83,9 +82,8 @@ public class Region {
         this.members.remove(name);
     }
 
-    public void sendDeny(Player p) {
+    public static void sendDeny(Player p) {
         p.sendMessage(ChatColor.RED + "District: You cannot do that in this region!");
-        return;
     }
 
     // Check if they can be part of the region
@@ -94,8 +92,6 @@ public class Region {
         if (owner.equals(p)) {
             return true;
         } else if (members.contains(p)) {
-            return true;
-        } else if (player.hasPermission("district.ignore")) {
             return true;
         } else {
             return false;

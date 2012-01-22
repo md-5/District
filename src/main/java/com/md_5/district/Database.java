@@ -12,7 +12,7 @@ public final class Database {
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
         }
-        writeRaw("CREATE TABLE IF NOT EXISTS `" + Config.prefix + "regions` ("
+        writeRaw("CREATE TABLE IF NOT EXISTS `ds_regions` ("
                 + "`name` TEXT NOT NULL ,"
                 + "`world` TEXT NOT NULL ,"
                 + "`start_x` INT NOT NULL ,"
@@ -23,7 +23,7 @@ public final class Database {
                 + "`end_z` INT NOT NULL ,"
                 + "`owner` TEXT NOT NULL"
                 + ") ENGINE = MYISAM ;");
-        writeRaw("CREATE TABLE IF NOT EXISTS `" + Config.prefix + "friends` ("
+        writeRaw("CREATE TABLE IF NOT EXISTS `ds_friends` ("
                 + "`regionName` TEXT NOT NULL ,"
                 + "`playerName` TEXT NOT NULL"
                 + ") ENGINE = MYISAM ;");
@@ -63,39 +63,38 @@ public final class Database {
         }
     }
 
-    /**
-     * Query the database for an int, only returns first row / first field
-     *
-     * @param sql the sql to execute
-     * @return first int matching the specified sql query
-     */
-    public static Integer getInt(final String sql) {
+    public static HashMap<Integer, ArrayList<String>> read(final String sql, final ArrayList<String> args) {
         ResultSet rs = null;
-        Integer result = 0;
+        HashMap<Integer, ArrayList<String>> rows = new HashMap<Integer, ArrayList<String>>();
         try {
             Connection conn = DriverManager.getConnection(Config.connectionString);
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt = conn.prepareStatement(sql);
-            if (stmt.executeQuery() != null) {
-                stmt.executeQuery();
-                rs = stmt.getResultSet();
-                if (rs.next()) {
-                    result = rs.getInt(1);
-                } else {
-                    result = 0;
+            PreparedStatement ps = conn.prepareStatement(sql);
+            for (int i = 0; i < args.size(); i++) {
+                try {
+                    ps.setInt(i + 1, Integer.parseInt(args.get(i)));
+                } catch (final NumberFormatException ex) {
+                    ps.setString(i + 1, args.get(i));
+                }
+            }
+            rs = ps.executeQuery();
+            if (rs != null) {
+                while (rs.next()) {
+                    ArrayList<String> Col = new ArrayList<String>();
+                    for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
+                        Col.add(rs.getString(i));
+                    }
+                    rows.put(rs.getRow(), Col);
                 }
             }
             conn.close();
         } catch (SQLException ex) {
-            System.out.println("SQLException: " + ex.getMessage());
-            System.out.println("SQLState: " + ex.getSQLState());
-            System.out.println("VendorError: " + ex.getErrorCode());
+            ex.printStackTrace();
         }
-
-        return result;
+        return rows;
     }
 
-    public static HashMap<Integer, ArrayList<String>> Read(final String sql) {
+    @Deprecated
+    public static HashMap<Integer, ArrayList<String>> readRaw(final String sql) {
         ResultSet rs = null;
         HashMap<Integer, ArrayList<String>> rows = new HashMap<Integer, ArrayList<String>>();
         try {

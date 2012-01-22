@@ -19,7 +19,7 @@ public class Executor {
 
     static void handle(final Cancellable event, final Region region, final Player player) {
         if (!region.canUse(player)) {
-            region.sendDeny(player);
+            Region.sendDeny(player);
             event.setCancelled(true);
         }
     }

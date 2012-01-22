@@ -12,11 +12,9 @@ wand: 286
 outline: 20
 cache: 200
 
-# MySQL info
+# MySQL info HOST IS ALWAYS LOCALHOST
 mysql:
-    host: 192.168.0.25
     port: 3306
     database: minecraft
     user: minecraft
     password: minecraft
-    prefix: ds_

@@ -19,7 +19,6 @@ public class District extends JavaPlugin {
         instance = this;
         Config.load();
         Database.init();
-        Loader.initCache();
         new DistrictListener();
         lwc = ((LWCPlugin) getServer().getPluginManager().getPlugin("LWC")).getLWC();
         System.out.println(String.format("District v%1$s by md_5 enabled", this.getDescription().getVersion()));

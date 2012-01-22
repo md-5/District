@@ -8,13 +8,14 @@ import org.bukkit.entity.Player;
 
 public class Util {
 
-    public static ArrayList<Region> getCuboids(World w, int point_x, int point_y, int point_z) {
-        String sql = ("SELECT name FROM " + Config.prefix + "regions"
+    @Deprecated
+    private static ArrayList<Region> getCuboids(World w, int point_x, int point_y, int point_z) {
+        String sql = ("SELECT name FROM ds_regions"
                 + " WHERE `start_x` <= " + point_x + " AND `end_x` >= " + point_x
                 + " AND `start_y` <= " + point_y + " AND `end_y` >= " + point_y
                 + " AND `start_z` <= " + point_z + " AND `end_z` >= " + point_z
                 + " AND `world` = '" + w.getName() + "';");
-        HashMap<Integer, ArrayList<String>> result = Database.Read(sql);
+        HashMap<Integer, ArrayList<String>> result = Database.readRaw(sql);
         ArrayList<String> regionNames = new ArrayList<String>();
         for (ArrayList<String> s : result.values()) {
             regionNames.add(s.get(0));
@@ -26,8 +27,30 @@ public class Util {
         return regions;
     }
 
+    @Deprecated
     public static ArrayList<Region> getRegions(Location location) {
         return getCuboids(location.getWorld(), location.getBlockX(), location.getBlockY(), location.getBlockZ());
+    }
+
+    private static Region getRegion(final World w, final int point_x, final int point_y, final int point_z) {
+        final String sql = ("SELECT name FROM ds_regions WHERE `start_x` <= ? AND `end_x` >= ? AND `start_y` <= ? AND `end_y` >= ? AND `start_z` <= ? AND `end_z` >= ? AND `world` = ? ;");
+        final ArrayList<String> args = new ArrayList<String>();
+        args.add(String.valueOf(point_x));
+        args.add(String.valueOf(point_x));
+        args.add(String.valueOf(point_y));
+        args.add(String.valueOf(point_y));
+        args.add(String.valueOf(point_z));
+        args.add(String.valueOf(point_z));
+        args.add(w.getName());
+        final ArrayList<String> result = Database.read(sql, args).get(1);
+        if (result == null){
+            return null;
+        }
+        return Loader.load(result.get(0));
+    }
+
+    public static Region getRegion(final Location location) {
+        return getRegion(location.getWorld(), location.getBlockX(), location.getBlockY(), location.getBlockZ());
     }
 
     public static void outline(Player p, Region r) {

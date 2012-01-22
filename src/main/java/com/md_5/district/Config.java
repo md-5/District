@@ -6,7 +6,7 @@ public class Config {
 
     public static int xsmall, small, medium, large, xlarge;
     public static int wand, outline, cache;
-    public static String connectionString, prefix;
+    public static String connectionString;
 
     public static void load() {
         // General config loading
@@ -23,9 +23,8 @@ public class Config {
         outline = config.getInt("outline", 20);
         cache = config.getInt("cache", 200);
         // Database
-        connectionString = "jdbc:mysql://" + config.getString("mysql.host") + ":" + config.getInt("mysql.port")
+        connectionString = "jdbc:mysql://127.0.0.1:" + config.getInt("mysql.port")
                 + "/" + config.getString("mysql.database") + "?user=" + config.getString("mysql.user")
                 + "&password=" + config.getString("mysql.password");
-        prefix = config.getString("mysql.prefix", "ds_");
     }
 }
