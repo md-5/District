@@ -2,6 +2,7 @@ package com.md_5.district;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -43,7 +44,7 @@ public class Util {
         args.add(String.valueOf(point_z));
         args.add(w.getName());
         final ArrayList<String> result = Database.read(sql, args).get(1);
-        if (result == null){
+        if (result == null) {
             return null;
         }
         return Loader.load(result.get(0));
@@ -124,13 +125,11 @@ public class Util {
                 setBlockClient(new Location(w, x, maxY, z), block, p);
             }
         }
-        return;
     }
 
-    public static void timedOutline(final Player p, final Region r,
-            int ticks, District plugin) {
+    public static void timedOutline(final Player p, final Region r, int ticks) {
         outline(p, r);
-        plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable() {
+        Bukkit.getServer().getScheduler().scheduleAsyncDelayedTask(District.instance, new Runnable() {
 
             public void run() {
                 removeOutline(p, r);

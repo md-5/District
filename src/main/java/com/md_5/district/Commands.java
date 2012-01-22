@@ -1,31 +1,26 @@
 package com.md_5.district;
 
 import java.util.ArrayList;
-
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.World;
-import org.bukkit.command.CommandException;
+import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 public class Commands {
 
-    public static void claim(Player player, String[] args, final District district, int count) {
+    public static void claim(final Player player, final String[] args, final int count) {
         if (args.length != count) {
             invalidArgs(player);
             return;
         }
-        int size, height;
+        int size = 0, height;
         try {
             size = Integer.parseInt(args[1]);
         } catch (NumberFormatException ex) {
-            throw new CommandException(args[1] + " is not a valid number");
+            player.sendMessage(args[1] + " is not a valid number");
         }
         if (size % 2 == 0) {
-            throw new CommandException("Size must be odd");
+            player.sendMessage("Size must be odd");
         }
 
         World world = player.getWorld();
@@ -62,13 +57,9 @@ public class Commands {
         Loader.save(creation);
         player.sendMessage(ChatColor.GREEN + "District: A " + args[1] + "x" + args[1] + "x"
                 + args[1] + " (" + creation.getVolume() + " blocks) region named " + creation.getName() + " has been claimed for you!");
-
-        //Util.timedOutline(player, creation, 80, district);
-
-        return;
     }
 
-    public static void quota(Player player, String[] args) {
+    public static void quota(final Player player, final String[] args) {
         int used = Util.getTotalVolume(player);
         int total = Util.getMaxVolume(player);
         String totalStr = total == -1 ? "infinite" : "" + total;
@@ -76,7 +67,7 @@ public class Commands {
                 + " blocks of your " + totalStr + " block quota.");
     }
 
-    public static void show(Player player, String[] args, Region r) {
+    public static void show(final Player player, final String[] args, final Region r) {
         if (args.length != 2) {
             invalidArgs(player);
             return;
@@ -88,11 +79,11 @@ public class Commands {
                     + "x" + (size.getBlockY() + 1) + "x" + (size.getBlockZ() + 1) + " ("
                     + r.getVolume() + " blocks) region has been outlined just for you");
         } else {
-            r.sendDeny(player);
+            Region.sendDeny(player);
         }
     }
 
-    public static void hide(Player player, String[] args, Region r) {
+    public static void hide(final Player player, final String[] args, final Region r) {
         if (args.length != 2) {
             invalidArgs(player);
         }
@@ -103,11 +94,11 @@ public class Commands {
                     + "x" + (size.getBlockY() + 1) + "x" + (size.getBlockZ() + 1)
                     + " region has been hidden");
         } else {
-            r.sendDeny(player);
+            Region.sendDeny(player);
         }
     }
 
-    public static void remove(Player player, String[] args, final District district, Region r) {
+    public static void remove(final Player player, final String[] args, final Region r) {
         if (args.length != 2) {
             invalidArgs(player);
             return;
@@ -116,11 +107,11 @@ public class Commands {
             Loader.remove(r.getName());
             player.sendMessage(ChatColor.GREEN + "District: Region " + r.getName() + " removed");
         } else {
-            r.sendDeny(player);
+            Region.sendDeny(player);
         }
     }
 
-    public static void addMember(Player player, String[] args, final District district, Region r) {
+    public static void addMember(final Player player, final String[] args, final Region r) {
         if (args.length != 3) {
             invalidArgs(player);
             return;
@@ -134,12 +125,11 @@ public class Commands {
                 player.sendMessage(ChatColor.RED + "District: Player " + args[2] + " is already a member of " + r.getName());
             }
         } else {
-            r.sendDeny(player);
+            Region.sendDeny(player);
         }
-        return;
     }
 
-    public static void delMember(Player player, String[] args, final District district, Region r) {
+    public static void delMember(final Player player, String[] args, final Region r) {
         if (args.length != 3) {
             invalidArgs(player);
             return;
@@ -153,12 +143,11 @@ public class Commands {
                 player.sendMessage(ChatColor.RED + "District: Player " + args[2] + " is not a member of " + r.getName());
             }
         } else {
-            r.sendDeny(player);
+            Region.sendDeny(player);
         }
-        return;
     }
 
-    public static void list(String player, CommandSender sender) {
+    public static void list(final String player, final CommandSender sender) {
         String owns = "";
         String isMemberOf = "";
         for (Region r : Loader.byOwner(player)) {
@@ -183,9 +172,9 @@ public class Commands {
         }
     }
 
-    public static void listAll(Player sender, String[] args) {
+    public static void listAll(final Player sender, final String[] args) {
         if (!sender.hasPermission("district.listall")) {
-            throw new CommandException("You don't have permission to access that command!");
+            sender.sendMessage("You don't have permission to access that command!");
         }
 
         if (args.length == 2) {
@@ -203,7 +192,7 @@ public class Commands {
         }
     }
 
-    public static void listMembers(Player player, String[] args, Region r) {
+    public static void listMembers(final Player player, final String[] args, final Region r) {
         if (args.length != 2) {
             invalidArgs(player);
             return;
@@ -219,19 +208,17 @@ public class Commands {
                 player.sendMessage(ChatColor.GREEN + "District: " + r.getName() + " has no members");
             }
         } else {
-            r.sendDeny(player);
+            Region.sendDeny(player);
         }
-        return;
     }
 
-    public static void invalidArgs(Player p) {
-        throw new CommandException("Invalid number of arguments for that command");
+    private static void invalidArgs(final Player p) {
+        p.sendMessage("Invalid number of arguments for that command");
     }
 
-    public static void setOwner(Player player, String[] args,
-            District district, Region region) {
+    public static void setOwner(final Player player, final String[] args, final Region region) {
         if (!player.hasPermission("district.setowner")) {
-            throw new CommandException("You don't have permission to access that command!");
+            player.sendMessage("You don't have permission to access that command!");
         }
 
         if (args.length != 3) {
@@ -240,10 +227,10 @@ public class Commands {
         }
 
         String newOwnerName = args[2];
-        OfflinePlayer newOwner = district.getServer().getOfflinePlayer(newOwnerName);
+        OfflinePlayer newOwner = Bukkit.getServer().getOfflinePlayer(newOwnerName);
 
         if (!newOwner.hasPlayedBefore()) {
-            throw new CommandException(newOwnerName + " has never been on this server!");
+            player.sendMessage(newOwnerName + " has never been on this server!");
         }
 
         region.setOwner(newOwnerName);

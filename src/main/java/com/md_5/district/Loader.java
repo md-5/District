@@ -9,7 +9,7 @@ import org.bukkit.World;
 
 public class Loader {
 
-    private static HashMap<String, Region> cache = new HashMap<String, Region>();
+    private static final HashMap<String, Region> cache = new HashMap<String, Region>();
 
     public static Region load(final String name) {
         if (cache.containsKey(name)) {

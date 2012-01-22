@@ -10,9 +10,9 @@ public class Config {
 
     public static void load() {
         // General config loading
+        District.instance.saveDefaultConfig();
         final FileConfiguration config = District.instance.getConfig();
         config.options().copyDefaults(true);
-        District.instance.saveConfig();
         // Populate the variables
         xsmall = config.getInt("xsmall", 5);
         small = config.getInt("small", 7);

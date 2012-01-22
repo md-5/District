@@ -9,8 +9,8 @@ import org.bukkit.Location;
 
 public final class RegionSearcher {
 
-    private static ExecutorService pool = Executors.newSingleThreadExecutor();
-    Location location;
+    private static final ExecutorService pool = Executors.newSingleThreadExecutor();
+    private final Location location;
     public Future<Region> future;
 
     public RegionSearcher(Location location) {
@@ -30,7 +30,7 @@ public final class RegionSearcher {
                     return regions.get(0);
                 }
             });
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             ex.printStackTrace();
         }
     }

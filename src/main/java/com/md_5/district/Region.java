@@ -9,12 +9,12 @@ import org.bukkit.util.Vector;
 
 public class Region {
 
-    private String name;
-    public int start_x, start_y, start_z;
-    public int end_x, end_y, end_z;
-    private World w;
+    final private String name;
+    final public int start_x, start_y, start_z;
+    final public int end_x, end_y, end_z;
+    final private World w;
+    final private ArrayList<String> members;
     private String owner;
-    private ArrayList<String> members;
 
     public Region(final World w, final Location l1, final Location l2, final String owner, final ArrayList<String> members, final String name) {
         this.w = w;
@@ -39,30 +39,26 @@ public class Region {
         return w;
     }
 
-    public void setWorld(World w) {
-        this.w = w;
-    }
-
     public String getOwner() {
         return owner;
     }
 
-    public boolean canAdmin(Player p) {
+    public boolean canAdmin(final Player p) {
         if (isOwner(p) || p.hasPermission("district.ignore")) {
             return true;
         }
         return false;
     }
 
-    public boolean isOwner(String name) {
+    public boolean isOwner(final String name) {
         return owner.equals(name);
     }
 
-    public boolean isOwner(Player p) {
+    public boolean isOwner(final Player p) {
         return isOwner(p.getName());
     }
 
-    public void setOwner(String owner) {
+    public void setOwner(final String owner) {
         this.owner = owner;
     }
 
@@ -70,24 +66,24 @@ public class Region {
         return members;
     }
 
-    public boolean isMember(String name) {
+    public boolean isMember(final String name) {
         return members.contains(name);
     }
 
-    public void addMember(String name) {
+    public void addMember(final String name) {
         this.members.add(name);
     }
 
-    public void removeMember(String name) {
+    public void removeMember(final String name) {
         this.members.remove(name);
     }
 
-    public static void sendDeny(Player p) {
+    public static void sendDeny(final Player p) {
         p.sendMessage(ChatColor.RED + "District: You cannot do that in this region!");
     }
 
     // Check if they can be part of the region
-    public boolean canUse(Player player) {
+    public boolean canUse(final Player player) {
         String p = player.getName();
         if (owner.equals(p)) {
             return true;
@@ -102,7 +98,7 @@ public class Region {
         return new Vector(end_x - start_x, end_y - start_y, end_z - start_z);
     }
 
-    public boolean isMember(Player player) {
+    public boolean isMember(final Player player) {
         return isMember(player.getName());
     }
 
