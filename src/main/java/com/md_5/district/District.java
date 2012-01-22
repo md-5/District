@@ -20,7 +20,10 @@ public class District extends JavaPlugin {
         Config.load();
         Database.init();
         new DistrictListener();
-        lwc = ((LWCPlugin) getServer().getPluginManager().getPlugin("LWC")).getLWC();
+        LWCPlugin lwcPlugin = (LWCPlugin) getServer().getPluginManager().getPlugin("LWC");
+        if(lwcPlugin != null) {
+            lwc = lwcPlugin.getLWC();
+        }
         System.out.println(String.format("District v%1$s by md_5 enabled", this.getDescription().getVersion()));
     }
 
