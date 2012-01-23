@@ -65,6 +65,13 @@ public class Commands {
         String totalStr = total == -1 ? "infinite" : "" + total;
         player.sendMessage(ChatColor.GREEN + "District: You have claimed " + used
                 + " blocks of your " + totalStr + " block quota.");
+        if (total != -1)
+        {
+            int remaining = total - used;
+            int root = (int) Math.round(Math.sqrt(used));
+            player.sendMessage(ChatColor.GREEN + "District: You have " + remaining +
+                    " blocks remaining (About " + root + "x" + root + "x" + root + ")");
+        }
     }
 
     public static void show(final Player player, final String[] args, final Region r) {
