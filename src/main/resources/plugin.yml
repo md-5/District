@@ -1,5 +1,5 @@
 name: District
-version: 2.1
+version: 2.2
 description: Simple self-managed land claiming plugin for Shadowraze
 author: md_5
 authors: [Na7coldwater]
@@ -38,7 +38,7 @@ permissions:
         default: false
     district.medium:
         description: Size of regions the player can claim
-        default: false
+        default: true
     district.large:
         description: Size of regions the player can claim
         default: false

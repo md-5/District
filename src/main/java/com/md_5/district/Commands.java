@@ -21,6 +21,7 @@ public class Commands {
         }
         if (size % 2 == 0) {
             player.sendMessage("Size must be odd");
+            return;
         }
 
         World world = player.getWorld();
@@ -39,7 +40,7 @@ public class Commands {
         point1.add(size, height, size);
         point2.add(-size, -size, -size);
 
-        if (((Util.getTotalVolume(player.getName()) + Util.getVolume(point1, point2)) > Util.getMaxVolume(player)) && Util.getMaxVolume(player) != -1) {
+        if (((Util.getTotalSize(player.getName()) + size) > Util.getMaxSize(player)) && Util.getMaxSize(player) != -1) {
             player.sendMessage(ChatColor.RED + "District: You cannot claim a region that big!");
             player.sendMessage(ChatColor.RED + "District: Use /district quota to view your remaining quota");
             return;
@@ -56,21 +57,19 @@ public class Commands {
         Region creation = new Region(point1.getWorld(), point1, point2, player.getName(), new ArrayList<String>(), args[2]);
         Loader.save(creation);
         player.sendMessage(ChatColor.GREEN + "District: A " + args[1] + "x" + args[1] + "x"
-                + args[1] + " (" + creation.getVolume() + " blocks) region named " + creation.getName() + " has been claimed for you!");
+                + args[1] + " region named " + creation.getName() + " has been claimed for you!");
     }
 
     public static void quota(final Player player, final String[] args) {
-        int used = Util.getTotalVolume(player);
-        int total = Util.getMaxVolume(player);
+        int used = Util.getTotalSize(player);
+        int total = Util.getMaxSize(player);
         String totalStr = total == -1 ? "infinite" : "" + total;
         player.sendMessage(ChatColor.GREEN + "District: You have claimed " + used
                 + " blocks of your " + totalStr + " block quota.");
-        if (total != -1)
-        {
+        if (total != -1) {
             int remaining = total - used;
-            int root = (int) Math.round(Math.sqrt(used));
-            player.sendMessage(ChatColor.GREEN + "District: You have " + remaining +
-                    " blocks remaining (About " + root + "x" + root + "x" + root + ")");
+            player.sendMessage(ChatColor.GREEN + "District: You have " + remaining
+                    + " blocks squared remaining");
         }
     }
 
@@ -81,10 +80,7 @@ public class Commands {
         }
         if (r.canUse(player)) {
             Util.outline(player, r);
-            Vector size = r.getSize();
-            player.sendMessage(ChatColor.GREEN + "District: Your " + (size.getBlockX() + 1)
-                    + "x" + (size.getBlockY() + 1) + "x" + (size.getBlockZ() + 1) + " ("
-                    + r.getVolume() + " blocks) region has been outlined just for you");
+            player.sendMessage(ChatColor.GREEN + "District: Your region has been outlined just for you");
         } else {
             Region.sendDeny(player);
         }
@@ -96,10 +92,7 @@ public class Commands {
         }
         if (r.canUse(player)) {
             Util.removeOutline(player, r);
-            Vector size = r.getSize();
-            player.sendMessage(ChatColor.GREEN + "District: Your " + (size.getBlockX() + 1)
-                    + "x" + (size.getBlockY() + 1) + "x" + (size.getBlockZ() + 1)
-                    + " region has been hidden");
+            player.sendMessage(ChatColor.GREEN + "District: Your region has been hidden");
         } else {
             Region.sendDeny(player);
         }
