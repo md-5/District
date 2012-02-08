@@ -144,9 +144,7 @@ public class Util {
     public static int getTotalSize(String player) {
         int num = 0;
         for (Region r : Loader.byOwner(player)) {
-            if (r.getOwner().equals(player)) {
-                num += r.getSize();
-            }
+            num += r.getSize();
         }
         return num;
     }

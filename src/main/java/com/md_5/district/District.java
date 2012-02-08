@@ -14,6 +14,7 @@ public class District extends JavaPlugin {
     public static District instance;
     public LWC lwc;
 
+    @Override
     public void onEnable() {
         instance = this;
         Config.load();
@@ -23,11 +24,6 @@ public class District extends JavaPlugin {
         if (lwcPlugin != null) {
             lwc = lwcPlugin.getLWC();
         }
-        System.out.println(String.format("District v%1$s by md_5 enabled", this.getDescription().getVersion()));
-    }
-
-    public void onDisable() {
-        System.out.println(String.format("District v%1$s by md_5 disabled", this.getDescription().getVersion()));
     }
 
     @Override

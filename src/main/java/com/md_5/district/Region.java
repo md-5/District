@@ -5,7 +5,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
 
 public class Region {
 
@@ -95,7 +94,7 @@ public class Region {
     }
 
     public int getSize() {
-        return end_x - start_x;
+        return Math.abs(end_x - start_x);
     }
 
     public boolean isMember(final Player player) {

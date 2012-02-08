@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
 
 public class Commands {
 
@@ -33,12 +32,12 @@ public class Commands {
         height /= 2;
 
         size = (int) Math.floor(size);
-        height = (int) Math.floor(size);
+        height = (int) Math.floor(height);
 
         Location point1 = player.getLocation();
         Location point2 = player.getLocation();
         point1.add(size, height, size);
-        point2.add(-size, -size, -size);
+        point2.add(-size, -height, -size);
 
         if (((Util.getTotalSize(player.getName()) + size) > Util.getMaxSize(player)) && Util.getMaxSize(player) != -1) {
             player.sendMessage(ChatColor.RED + "District: You cannot claim a region that big!");
