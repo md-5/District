@@ -14,6 +14,7 @@ public class District extends JavaPlugin {
     public static District instance;
     public LWC lwc;
 
+    @Override
     public void onEnable() {
         instance = this;
         Config.load();
@@ -23,11 +24,6 @@ public class District extends JavaPlugin {
         if (lwcPlugin != null) {
             lwc = lwcPlugin.getLWC();
         }
-        System.out.println(String.format("District v%1$s by md_5 enabled", this.getDescription().getVersion()));
-    }
-
-    public void onDisable() {
-        System.out.println(String.format("District v%1$s by md_5 disabled", this.getDescription().getVersion()));
     }
 
     @Override
@@ -104,13 +100,13 @@ public class District extends JavaPlugin {
         } else if (args[1].trim().equals("-")) {
             Region region = Util.getRegion(player.getLocation());
             if (region == null) {
-                throw new CommandException("Unable to use '-' operator when not in a region");
+                player.sendMessage(ChatColor.RED + "Unable to use '-' operator when not in a region");
             }
             return region;
         } else {
             Region r = Loader.load(args[1]);
             if (r == null) {
-                throw new CommandException("Region does not exist");
+                player.sendMessage(ChatColor.RED + "Region does not exist");
             }
             return r;
         }

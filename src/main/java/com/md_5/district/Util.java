@@ -141,12 +141,10 @@ public class Util {
         p.sendBlockChange(loc, b, (byte) 0);
     }
 
-    public static int getTotalVolume(String player) {
+    public static int getTotalSize(String player) {
         int num = 0;
         for (Region r : Loader.byOwner(player)) {
-            if (r.getOwner().equals(player)) {
-                num += r.getVolume();
-            }
+            num += r.getSize();
         }
         return num;
     }
@@ -171,15 +169,6 @@ public class Util {
             return Config.xsmall;
         }
         return 0;
-    }
-
-    public static int getMaxVolume(Player player) {
-        int maxSize = getMaxSize(player);
-        if (maxSize == -1) {
-            return -1;
-        } else {
-            return (int) Math.pow(getMaxSize(player), 3);
-        }
     }
 
     public static int getVolume(Location l1, Location l2) {
@@ -216,7 +205,7 @@ public class Util {
         return false;
     }
 
-    public static int getTotalVolume(Player player) {
-        return getTotalVolume(player.getName());
+    public static int getTotalSize(Player player) {
+        return getTotalSize(player.getName());
     }
 }
