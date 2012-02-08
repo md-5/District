@@ -104,13 +104,13 @@ public class District extends JavaPlugin {
         } else if (args[1].trim().equals("-")) {
             Region region = Util.getRegion(player.getLocation());
             if (region == null) {
-                throw new CommandException("Unable to use '-' operator when not in a region");
+                player.sendMessage(ChatColor.RED + "Unable to use '-' operator when not in a region");
             }
             return region;
         } else {
             Region r = Loader.load(args[1]);
             if (r == null) {
-                throw new CommandException("Region does not exist");
+                player.sendMessage(ChatColor.RED + "Region does not exist");
             }
             return r;
         }
