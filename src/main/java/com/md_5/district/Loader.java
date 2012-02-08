@@ -23,8 +23,11 @@ public class Loader {
         Region region = null;
         try {
             Connection conn = DriverManager.getConnection(Config.connectionString);
-            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM ds_regions WHERE name='" + name + "'");
-            final ResultSet rs = stmt.executeQuery();
+            
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM ds_regions WHERE name = ?");
+            stmt.setString(1, name);
+            ResultSet rs = stmt.executeQuery();
+            
             if (!rs.next()) {
                 return null;
             }
@@ -38,11 +41,20 @@ public class Loader {
             final int end_z = rs.getInt("end_z");
             final Location l2 = new Location(world, end_x, end_y, end_z);
             final String owner = rs.getString("owner");
-            conn.close();
+            
+            stmt = conn.prepareStatement("SELECT playerName FROM ds_friends WHERE regionName = ?");
+            stmt.setString(1, name);
+            rs = stmt.executeQuery();
+            
             ArrayList<String> friends = new ArrayList<String>();
-            for (ArrayList<String> f : Database.readRaw("SELECT playerName FROM ds_friends WHERE regionName='" + name + "'").values()) {
-                friends.add(f.get(0));
+            if (rs != null) {
+                while (rs.next()) {
+                    friends.add(rs.getString(0));
+                }
             }
+            
+            conn.close();
+            
             region = new Region(world, l1, l2, owner, friends, name);
             putCache(region);
         } catch (SQLException ex) {
