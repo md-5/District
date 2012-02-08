@@ -18,9 +18,11 @@ public class Commands {
             size = Integer.parseInt(args[1]);
         } catch (NumberFormatException ex) {
             player.sendMessage(args[1] + " is not a valid number");
+            return;
         }
         if (size % 2 == 0) {
             player.sendMessage("Size must be odd");
+            return;
         }
 
         World world = player.getWorld();
