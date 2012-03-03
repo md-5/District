@@ -96,7 +96,8 @@ public class District extends JavaPlugin {
 
     private Region matchRegion(final Player player, final String[] args) {
         if (args.length <= 1) {
-            throw new CommandException("You must supply a region name or '-'");
+            player.sendMessage("You must supply a region name or '-'");
+            return null;
         } else if (args[1].trim().equals("-")) {
             Region region = Util.getRegion(player.getLocation());
             if (region == null) {
