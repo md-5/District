@@ -219,6 +219,7 @@ public class Commands {
     public static void setOwner(final Player player, final String[] args, final Region region) {
         if (!player.hasPermission("district.setowner")) {
             player.sendMessage("You don't have permission to access that command!");
+            return;
         }
 
         if (args.length != 3) {
