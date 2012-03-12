@@ -5,6 +5,7 @@ import java.util.HashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 public class Util {
@@ -96,33 +97,33 @@ public class Util {
         int maxY = r.end_y;
         int maxZ = r.end_z;
 
-        int block;
+        Block block;
 
         for (int x = minX; x <= maxX; ++x) {
             for (int y = minY; y <= maxY; ++y) {
-                block = w.getBlockTypeIdAt(x, y, minZ);
-                setBlockClient(new Location(w, x, y, minZ), block, p);
+                block = w.getBlockAt(x, y, minZ);
+                setBlockClient(new Location(w, x, y, minZ), block.getTypeId(), p, block.getData());
 
-                block = w.getBlockTypeIdAt(x, y, maxZ);
-                setBlockClient(new Location(w, x, y, maxZ), block, p);
+                block = w.getBlockAt(x, y, maxZ);
+                setBlockClient(new Location(w, x, y, maxZ), block.getTypeId(), p, block.getData());
             }
         }
         for (int y = minY; y <= maxY; ++y) {
             for (int z = minZ; z <= maxZ; ++z) {
-                block = w.getBlockTypeIdAt(minX, y, z);
-                setBlockClient(new Location(w, minX, y, z), block, p);
+                block = w.getBlockAt(minX, y, z);
+                setBlockClient(new Location(w, minX, y, z), block.getTypeId(), p, block.getData());
 
-                block = w.getBlockTypeIdAt(maxX, y, z);
-                setBlockClient(new Location(w, maxX, y, z), block, p);
+                block = w.getBlockAt(maxX, y, z);
+                setBlockClient(new Location(w, maxX, y, z), block.getTypeId(), p, block.getData());
             }
         }
         for (int z = minZ; z <= maxZ; ++z) {
             for (int x = minX; x <= maxX; ++x) {
-                block = w.getBlockTypeIdAt(x, minY, z);
-                setBlockClient(new Location(w, x, minY, z), block, p);
+                block = w.getBlockAt(x, minY, z);
+                setBlockClient(new Location(w, x, minY, z), block.getTypeId(), p, block.getData());
 
-                block = w.getBlockTypeIdAt(x, maxY, z);
-                setBlockClient(new Location(w, x, maxY, z), block, p);
+                block = w.getBlockAt(x, maxY, z);
+                setBlockClient(new Location(w, x, maxY, z), block.getTypeId(), p, block.getData());
             }
         }
     }
@@ -138,7 +139,11 @@ public class Util {
     }
 
     public static void setBlockClient(Location loc, int b, Player p) {
-        p.sendBlockChange(loc, b, (byte) 0);
+        setBlockClient(loc, b, p, (byte) 0);
+    }
+
+    public static void setBlockClient(Location loc, int type, Player p, byte data) {
+        p.sendBlockChange(loc, type, data);
     }
 
     public static int getTotalSize(String player) {
